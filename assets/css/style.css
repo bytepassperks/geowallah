@@ -276,7 +276,7 @@ h3{font-size:1.4rem;letter-spacing:-.01em}
 .quote:nth-child(1) .av{background:var(--teal-bright);color:#fff}
 .quote:nth-child(2) .av{background:var(--violet);color:#fff}
 .quote:nth-child(3) .av{background:var(--amber);color:var(--ink)}
-.quote .who b{font-size:.92rem}.quote .who span{font-size:.78rem;color:var(--ink-2);display:block}
+.quote .who b{font-size:.92rem}.quote .who div span{font-size:.78rem;color:var(--ink-2);display:block}
 .quote .who b a{color:var(--teal);text-decoration:underline;text-underline-offset:2px}
 .quote .who b a:hover{color:var(--violet)}
 

@@ -61,15 +61,16 @@ h3{font-size:1.4rem;letter-spacing:-.01em}
 .lead{font-size:clamp(1.05rem,1.6vw,1.3rem);color:var(--ink-2);max-width:60ch;line-height:1.65}
 .muted{color:var(--ink-2)}
 
-/* highlighter underline */
-.mark{position:relative;white-space:nowrap;z-index:0}
+/* highlight block */
+.mark{position:relative;white-space:nowrap;z-index:0;padding:0 .14em}
 .mark::after{
-  content:"";position:absolute;left:-.06em;right:-.06em;bottom:.06em;height:.42em;
-  background:var(--amber);z-index:-1;transform:rotate(-1.2deg);border-radius:3px;opacity:.95;
+  content:"";position:absolute;left:0;right:0;top:-.06em;bottom:-.06em;
+  background:var(--amber);z-index:-1;transform:rotate(-1.2deg);border-radius:6px;
 }
 .mark.teal::after{background:var(--teal-bright)}
-.mark.violet::after{background:var(--violet);opacity:.28}
-.mark.cyan::after{background:var(--cyan);opacity:.35}
+.mark.violet::after{background:var(--violet)}
+.mark.violet{color:#fff}
+.mark.cyan::after{background:var(--cyan)}
 
 /* section kicker: 01 — Label */
 .kicker{display:inline-flex;align-items:center;gap:10px;font-family:var(--font-s);
@@ -289,6 +290,7 @@ h3{font-size:1.4rem;letter-spacing:-.01em}
   padding:60px 44px;text-align:center;box-shadow:var(--shadow);position:relative;overflow:hidden}
 .cta-band h2{color:#fff}
 .cta-band .lead{color:#e9e2ff;margin:14px auto 26px}
+.cta-band .mark{color:var(--ink)}
 .cta-band .mark::after{background:var(--amber)}
 .cta-actions{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
 .cta-band .btn-primary{background:#fff;color:var(--ink);border-color:var(--ink)}

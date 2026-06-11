@@ -1,7 +1,7 @@
 /* GEOwallah — free audit tool client */
 (function () {
   "use strict";
-  const API = "https://geowallah-audit.osc-fr1.scalingo.io";
+  const API = "https://geowallah-audit-prod.osc-fr1.scalingo.io";
 
   const form = document.getElementById("auditForm");
   if (!form) return;

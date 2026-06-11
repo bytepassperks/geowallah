@@ -128,12 +128,14 @@ h3{font-size:1.4rem;letter-spacing:-.01em}
 .ccard{position:absolute;background:var(--card);border:2px solid var(--ink);border-radius:var(--r);
   box-shadow:var(--shadow);padding:16px 18px}
 .ccard .ch{display:flex;align-items:center;gap:9px;font-weight:700;font-size:.86rem;margin-bottom:8px}
+.ccard .ch svg{width:17px;height:17px;flex:none;fill:none;stroke:currentColor;stroke-width:2.1;stroke-linecap:round;stroke-linejoin:round}
 .ccard .badge{font-size:.66rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;
   padding:3px 8px;border-radius:999px;border:1.5px solid var(--ink)}
 .c-search{top:6px;left:0;width:74%;z-index:3;transform:rotate(-2deg)}
 .c-search .res{display:flex;gap:10px;align-items:flex-start;padding:9px 0;border-top:1px dashed var(--hair)}
 .c-search .res:first-of-type{border-top:0}
-.c-search .pin{width:26px;height:26px;border-radius:7px;background:var(--paper-2);display:grid;place-items:center;font-size:.8rem;flex:none}
+.c-search .pin{width:26px;height:26px;border-radius:7px;background:var(--paper-2);display:grid;place-items:center;flex:none}
+.c-search .pin svg{width:15px;height:15px;fill:none;stroke:var(--ink);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .c-search .res b{font-size:.84rem}.c-search .res small{color:var(--ink-2);font-size:.74rem}
 .c-ai{top:188px;right:0;width:70%;z-index:4;transform:rotate(2.2deg);background:#14121d;color:#ECE9FF;border-color:var(--ink)}
 .c-ai .ch{color:#fff}
@@ -197,6 +199,13 @@ h3{font-size:1.4rem;letter-spacing:-.01em}
 .step{background:var(--card);border:2px solid var(--ink);border-radius:var(--r-lg);padding:24px;position:relative;box-shadow:var(--shadow-sm)}
 .step::before{counter-increment:st;content:"0" counter(st);font-family:var(--font-d);font-style:italic;
   font-size:1.5rem;color:var(--violet);display:block;margin-bottom:10px}
+.step .si{position:absolute;top:20px;right:20px;width:42px;height:42px;border:2px solid var(--ink);border-radius:12px;
+  display:grid;place-items:center;background:var(--paper-2)}
+.step .si svg{width:20px;height:20px;fill:none;stroke:var(--ink);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.step:nth-child(1) .si{background:var(--teal)}
+.step:nth-child(2) .si{background:var(--amber)}
+.step:nth-child(3) .si{background:var(--violet)}.step:nth-child(3) .si svg{stroke:#fff}
+.step:nth-child(4) .si{background:var(--cyan)}
 .step h3{font-size:1.18rem;margin-bottom:6px}
 .step p{font-size:.9rem;color:var(--ink-2)}
 
@@ -278,8 +287,14 @@ h3{font-size:1.4rem;letter-spacing:-.01em}
   border-radius:11px;background:var(--paper);font-family:var(--font-s);font-size:.96rem;color:var(--ink);transition:box-shadow .15s}
 .field textarea{min-height:120px;resize:vertical}
 .field input:focus,.field select:focus,.field textarea:focus{outline:none;box-shadow:var(--shadow-sm)}
-.contact-info .row{display:flex;gap:14px;padding:16px 0;border-bottom:1px dashed var(--hair);align-items:flex-start}
-.contact-info .row i{font-size:1.3rem;flex:none}
+.contact-info .row{display:flex;gap:14px;padding:16px 0;border-bottom:1px dashed var(--hair);align-items:center}
+.contact-info .row .ci{width:44px;height:44px;flex:none;border:2px solid var(--ink);border-radius:12px;
+  display:grid;place-items:center;background:var(--paper-2);box-shadow:var(--shadow-sm)}
+.contact-info .row .ci svg{width:21px;height:21px;fill:none;stroke:var(--ink);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.contact-info .row:nth-child(1) .ci{background:var(--teal)}
+.contact-info .row:nth-child(2) .ci{background:var(--violet)}.contact-info .row:nth-child(2) .ci svg{stroke:#fff}
+.contact-info .row:nth-child(3) .ci{background:var(--amber)}
+.contact-info .row:nth-child(4) .ci{background:var(--cyan)}
 .contact-info .row b{display:block;font-size:.95rem}
 .contact-info .row span{color:var(--ink-2);font-size:.9rem}
 

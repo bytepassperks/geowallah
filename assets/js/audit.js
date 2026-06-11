@@ -355,7 +355,7 @@
         '<div style="margin:7px 0;font-size:12px;line-height:1.5"><b style="color:#17150F">' + (i + 1) + ". " + esc(p.action) + '</b><br><span style="color:#5B554B">' + esc(p.why) + '</span></div>').join("");
       const faqs = (d.ai.faqs || []).map((q) => '<li style="margin:2px 0">' + esc(q) + '</li>').join("");
       B.push('<div style="padding:16px 18px;border:1px solid #E7E1D5;border-radius:14px;background:#fff">' +
-        '<div style="font-size:11px;font-weight:800;letter-spacing:.08em;color:#6D28D9;text-transform:uppercase">What to fix first</div>' + pr +
+        '<div style="font-size:11px;font-weight:800;letter-spacing:.08em;color:#6D28D9;text-transform:uppercase">Your 3 quick wins</div>' + pr +
         (d.ai.meta_description ? '<p style="margin:11px 0 3px;font-weight:700;font-size:12px;color:#17150F">Ready-to-use meta description</p><div style="font-size:11.5px;color:#3f3a31;background:#FBF9F4;border:1px solid #E7E1D5;border-radius:8px;padding:9px;line-height:1.5">' + esc(d.ai.meta_description) + '</div>' : "") +
         (faqs ? '<p style="margin:11px 0 3px;font-weight:700;font-size:12px;color:#17150F">FAQ questions to answer (for AI/voice)</p><ul style="margin:0 0 0 18px;padding:0;font-size:11.5px;color:#3f3a31">' + faqs + '</ul>' : "") + '</div>');
     }
@@ -576,7 +576,7 @@
 
       // ---- WHAT TO FIX FIRST ----
       if (d.ai && (d.ai.priorities || d.ai.meta_description)) {
-        kicker("What to fix first");
+        kicker("Your 3 quick wins");
         (d.ai.priorities || []).forEach((p, i) => {
           para((i + 1) + ". " + (p.action || ""), M, CW, 10, INK, "bold", 1.3); gap(0.5);
           if (p.why) para(p.why, M + 5, CW - 5, 9.5, GRY, "normal", 1.35);

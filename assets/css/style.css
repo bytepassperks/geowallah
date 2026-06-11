@@ -404,7 +404,7 @@ h3{font-size:1.4rem;letter-spacing:-.01em}
 @media(prefers-reduced-motion:reduce){
   *{animation:none!important;transition:none!important}
   [data-reveal]{opacity:1;transform:none}
-  .ambient,.doodle,.cursor-dot{display:none!important}
+  .ambient,.doodle{display:none!important}
 }
 
 /* ============================================================
@@ -453,15 +453,6 @@ body{
 /* ---- magnetic buttons (JS sets --mx/--my) ---- */
 .btn{will-change:transform}
 .magnetic{transform:translate(var(--mx,0),var(--my,0))}
-
-/* ---- custom cursor (desktop, fine pointer only) ---- */
-.cursor-dot{position:fixed;top:0;left:0;width:9px;height:9px;border-radius:50%;
-  background:var(--violet);z-index:120;pointer-events:none;
-  transform:translate(-50%,-50%);transition:width .18s var(--ease),height .18s var(--ease),background .18s,opacity .2s;mix-blend-mode:multiply}
-.cursor-ring{position:fixed;top:0;left:0;width:34px;height:34px;border-radius:50%;
-  border:2px solid rgba(109,40,217,.45);z-index:119;pointer-events:none;transform:translate(-50%,-50%)}
-.cursor-dot.hot{width:16px;height:16px;background:var(--teal-bright)}
-@media(hover:none),(pointer:coarse){.cursor-dot,.cursor-ring{display:none}}
 
 /* collage floats softly on its own */
 .collage{animation:collageFloat 9s ease-in-out infinite}

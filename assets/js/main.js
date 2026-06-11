@@ -217,28 +217,5 @@
         if (!ticking) { requestAnimationFrame(parallax); ticking = true; }
       }, { passive: true });
     }
-
-    /* custom cursor (desktop, fine pointer only) */
-    if (window.matchMedia('(hover:hover) and (pointer:fine)').matches) {
-      var dot = mk('div', 'cursor-dot'), rng = mk('div', 'cursor-ring');
-      document.body.appendChild(dot);
-      document.body.appendChild(rng);
-      var cx = 0, cy = 0, rx = 0, ry = 0;
-      window.addEventListener('mousemove', function (e) {
-        cx = e.clientX; cy = e.clientY;
-        dot.style.left = cx + 'px'; dot.style.top = cy + 'px';
-      });
-      (function ringLoop() {
-        rx += (cx - rx) * 0.18; ry += (cy - ry) * 0.18;
-        rng.style.left = rx + 'px'; rng.style.top = ry + 'px';
-        requestAnimationFrame(ringLoop);
-      })();
-      document.addEventListener('mouseover', function (e) {
-        if (e.target.closest && e.target.closest('a,button,.btn,.ccard,.block,.plan')) dot.classList.add('hot');
-      });
-      document.addEventListener('mouseout', function (e) {
-        if (e.target.closest && e.target.closest('a,button,.btn,.ccard,.block,.plan')) dot.classList.remove('hot');
-      });
-    }
   }
 })();

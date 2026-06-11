@@ -21,6 +21,7 @@ jobs:
         run: |
           code=$(curl -sS -o /dev/null -w "%{http_code}" "${{ secrets.RENDER_DEPLOY_HOOK }}")
           echo "Render deploy hook responded with HTTP $code"
-          if [ "$code" != "200" ] && [ "$code" != "201" ]; then
+          # Render returns 2xx (typically 201/202 Accepted) when the deploy is queued.
+          if [ "$code" -lt 200 ] || [ "$code" -ge 300 ]; then
             echo "Deploy hook failed"; exit 1
           fi

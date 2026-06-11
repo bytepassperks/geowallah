@@ -14,7 +14,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css?v=20260611c">
+<link rel="stylesheet" href="assets/css/style.css?v=20260611d">
 </head>
 <body>
 <div class="progress"></div>
@@ -106,9 +106,24 @@
         <p id="arVerdict" class="lead">Here's how customers and AI engines currently see your business.</p>
         <div class="ar-cta">
           <a class="btn btn-primary" href="https://wa.me/917003888936?text=Hi%20GEOwallah%2C%20I%20ran%20the%20free%20audit%20and%20want%20help%20fixing%20my%20visibility" target="_blank" rel="noopener">Fix this for me — free plan</a>
-          <a class="btn btn-ghost" href="pricing.html">See packages</a>
+          <button class="btn btn-ghost" type="button" id="arPdf">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="width:18px;height:18px;vertical-align:-3px;margin-right:6px"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 21h14"/></svg>Download PDF report</button>
         </div>
       </div>
+    </div>
+
+    <!-- AI SEARCH VISIBILITY -->
+    <div class="ar-vis block" id="arVis" hidden>
+      <span class="kicker"><span class="num">AI</span><span class="dash"></span> AI Search Visibility</span>
+      <h3 id="avTitle">Are AI engines naming you?</h3>
+      <p class="av-query">Tested live query: <b id="avQuery"></b></p>
+      <p id="avVerdict" class="lead"></p>
+      <div class="av-engines" id="avEngines"></div>
+      <div class="av-comp" id="avComp" hidden>
+        <h4>Who AI is naming instead <small>(top live results for your query)</small></h4>
+        <ol id="avCompList"></ol>
+      </div>
+      <p class="ai-note" id="avNote"></p>
     </div>
 
     <div class="ar-cats" id="arCats"></div>
@@ -127,7 +142,7 @@
           <ul id="arFaqs"></ul>
         </div>
       </div>
-      <p class="ai-note">AI analysis of your live page by GEOwallah, powered by Cloudflare Workers AI. We can't speak for ChatGPT/Gemini's exact answer — we verify real AI citations for you manually in the full audit.</p>
+      <p class="ai-note">On-page AI analysis by GEOwallah, powered by Cloudflare Workers AI — it reasons about your actual page content, not invented claims.</p>
     </div>
 
     <div class="ar-detail" id="arDetail"></div>
@@ -171,7 +186,9 @@
 <a class="wa-float" href="https://wa.me/917003888936" target="_blank" rel="noopener" aria-label="WhatsApp">
   <svg viewBox="0 0 24 24" fill="#fff"><path d="M12 2a10 10 0 0 0-8.6 15l-1.4 5 5.1-1.3A10 10 0 1 0 12 2Zm5.8 14.2c-.2.7-1.4 1.3-2 1.4-.5.1-1.2.1-1.9-.1-.4-.1-1-.3-1.7-.6-3-1.3-4.9-4.3-5.1-4.5-.1-.2-1.2-1.6-1.2-3s.7-2.1 1-2.4c.2-.3.5-.4.7-.4h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.3 0 .5l-.4.5c-.2.2-.3.4-.1.7.2.3.9 1.4 1.9 2.3 1.3 1.1 2.3 1.5 2.6 1.6.2.1.4.1.5-.1l.7-.9c.2-.2.4-.2.6-.1l2 .9c.3.1.4.2.4.4.1.2.1.9-.1 1.6Z"/></svg>
 </a>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="assets/js/main.js"></script>
-<script src="assets/js/audit.js?v=20260611c"></script>
+<script src="assets/js/audit.js?v=20260611d"></script>
 </body>
 </html>

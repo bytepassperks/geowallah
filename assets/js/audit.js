@@ -89,10 +89,14 @@
     errBox.scrollIntoView({ behavior: "smooth", block: "center" });
   }
 
+  let lastData = null;
+
   function render(d) {
     results.hidden = false;
+    lastData = d;
     // host
     document.getElementById("arHost").textContent = d.host || "your site";
+    renderVis(d.ai_visibility);
     // grade
     const grade = document.getElementById("arGrade");
     grade.textContent = d.grade || "";
@@ -185,6 +189,57 @@
     results.scrollIntoView({ behavior: "smooth" });
   }
 
+  const ENGINE_ICON = {
+    ChatGPT: '<svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M12 3l1.6 4.2L18 8.8l-4.4 1.6L12 15l-1.6-4.6L6 8.8l4.4-1.6z"/></svg>',
+    Gemini: '<svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M12 3c.6 4.5 1.5 5.4 6 6-4.5.6-5.4 1.5-6 6-.6-4.5-1.5-5.4-6-6 4.5-.6 5.4-1.5 6-6Z"/></svg>',
+    "Google AI": '<svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>',
+    Perplexity: '<svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 3v18M3 12h18"/></svg>',
+  };
+
+  function renderVis(v) {
+    const box = document.getElementById("arVis");
+    if (!v || !v.checked) { if (box) box.hidden = true; return; }
+    box.hidden = false;
+    box.classList.remove("tier-top", "tier-mid", "tier-absent");
+    box.classList.add("tier-" + v.tier);
+    document.getElementById("avQuery").textContent = "\u201c" + v.query + "\u201d";
+    document.getElementById("avTitle").textContent =
+      v.found ? (v.tier === "top" ? "Yes \u2014 you're in the results AI engines name first"
+                                   : "You're visible, but not the top pick AI cites")
+              : "Not yet \u2014 AI engines can't find you for this search";
+    document.getElementById("avVerdict").textContent = v.verdict || "";
+
+    const eng = document.getElementById("avEngines");
+    eng.innerHTML = "";
+    (v.engines || []).forEach((e) => {
+      const ok = e.found;
+      const el = document.createElement("div");
+      el.className = "av-eng " + (ok ? "ok" : "no");
+      el.innerHTML =
+        '<div class="ave-ic">' + (ENGINE_ICON[e.name] || "") + "</div>" +
+        '<div class="ave-b"><b>' + e.name + "</b><small>" + esc(e.via) + "</small></div>" +
+        '<span class="ave-tag">' + (ok ? (e.position ? "#" + e.position : "Found") : "Not found") + "</span>";
+      eng.appendChild(el);
+    });
+
+    const comp = document.getElementById("avComp");
+    const list = document.getElementById("avCompList");
+    if (v.competitors && v.competitors.length && (!v.found || v.position > 1)) {
+      comp.hidden = false;
+      list.innerHTML = "";
+      v.competitors.slice(0, 5).forEach((c) => {
+        const li = document.createElement("li");
+        li.innerHTML = '<b>' + esc(c.domain) + "</b><span>" + esc(c.title) + "</span>";
+        list.appendChild(li);
+      });
+    } else {
+      comp.hidden = true;
+    }
+    const note = "We ran your real query on live web results \u2014 the same index ChatGPT (via Bing), " +
+      "Gemini & Google AI Overviews read from. We report exactly what we measured, never a fake \u201cAI recommends you\u201d.";
+    document.getElementById("avNote").textContent = v.note ? v.note + " " + note : note;
+  }
+
   function esc(s) {
     return String(s == null ? "" : s)
       .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -199,6 +254,123 @@
         setTimeout(() => (e.target.textContent = "Copy"), 1600);
       });
     }
+  });
+
+  // ---------- PDF report ----------
+  function hex(s) {
+    if (s >= 85) return "#0EA98F";
+    if (s >= 70) return "#14B8A6";
+    if (s >= 50) return "#F59E0B";
+    return "#F97362";
+  }
+  const MARK = { pass: ["#0EA98F", "\u2713"], warn: ["#F59E0B", "\u26A0"], fail: ["#F97362", "\u2717"], info: ["#6D28D9", "i"] };
+
+  function buildReportHTML(d) {
+    const dt = new Date().toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
+    const sc = hex(d.overall_score);
+    const v = d.ai_visibility;
+    let vis = "";
+    if (v && v.checked) {
+      const eng = (v.engines || []).map((e) =>
+        '<td style="padding:9px 10px;border:1px solid #E7E1D5;font-size:12.5px">' +
+        '<b>' + e.name + '</b><br><span style="color:#7a7568;font-size:10.5px">' + esc(e.via) + '</span><br>' +
+        '<span style="color:' + (e.found ? "#0EA98F" : "#C2410C") + ';font-weight:700">' +
+        (e.found ? (e.position ? "Appears \u2014 #" + e.position : "Appears") : "Not found") + '</span></td>').join("");
+      let comp = "";
+      if (v.competitors && v.competitors.length && (!v.found || v.position > 1)) {
+        comp = '<p style="margin:10px 0 4px;font-weight:700;font-size:12.5px">Who AI is naming instead:</p><ol style="margin:0 0 0 18px;padding:0;font-size:12px;color:#3f3a31">' +
+          v.competitors.slice(0, 5).map((c) => '<li style="margin:2px 0"><b>' + esc(c.domain) + '</b> \u2014 ' + esc(c.title) + '</li>').join("") + '</ol>';
+      }
+      vis =
+        '<div style="margin:16px 0;padding:16px 18px;border:2px solid #17150F;border-radius:12px;background:#FBF9F4">' +
+        '<div style="font-size:11px;font-weight:800;letter-spacing:.08em;color:#6D28D9;text-transform:uppercase">AI Search Visibility</div>' +
+        '<p style="margin:6px 0 4px;font-size:13px">Tested live query: <b>\u201c' + esc(v.query) + '\u201d</b></p>' +
+        '<p style="margin:0 0 10px;font-size:12.5px;color:#3f3a31">' + esc(v.verdict) + '</p>' +
+        '<table style="border-collapse:collapse;width:100%"><tr>' + eng + '</tr></table>' + comp + '</div>';
+    }
+    const cats = (d.categories || []).map((c) =>
+      '<div style="display:flex;align-items:center;gap:10px;margin:7px 0">' +
+      '<div style="flex:1"><div style="display:flex;justify-content:space-between;font-size:12.5px;font-weight:700"><span>' + c.name + '</span><span style="color:' + hex(c.score) + '">' + c.score + '/100</span></div>' +
+      '<div style="height:8px;background:#EFEAE0;border-radius:6px;overflow:hidden;margin-top:3px"><div style="height:100%;width:' + c.score + '%;background:' + hex(c.score) + '"></div></div></div></div>'
+    ).join("");
+    let aiBlk = "";
+    if (d.ai && (d.ai.priorities || d.ai.meta_description)) {
+      const pr = (d.ai.priorities || []).map((p, i) =>
+        '<div style="margin:6px 0;font-size:12px"><b>' + (i + 1) + ". " + esc(p.action) + '</b><br><span style="color:#5B554B">' + esc(p.why) + '</span></div>').join("");
+      const faqs = (d.ai.faqs || []).map((q) => '<li style="margin:2px 0">' + esc(q) + '</li>').join("");
+      aiBlk =
+        '<div style="margin:16px 0;padding:16px 18px;border:1px solid #E7E1D5;border-radius:12px;background:#fff">' +
+        '<div style="font-size:11px;font-weight:800;letter-spacing:.08em;color:#6D28D9;text-transform:uppercase">What to fix first</div>' + pr +
+        (d.ai.meta_description ? '<p style="margin:10px 0 2px;font-weight:700;font-size:12px">Ready-to-use meta description</p><div style="font-size:11.5px;color:#3f3a31;background:#FBF9F4;border:1px solid #E7E1D5;border-radius:8px;padding:8px">' + esc(d.ai.meta_description) + '</div>' : "") +
+        (faqs ? '<p style="margin:10px 0 2px;font-weight:700;font-size:12px">FAQ questions to answer (for AI/voice)</p><ul style="margin:0 0 0 18px;padding:0;font-size:11.5px;color:#3f3a31">' + faqs + '</ul>' : "") + '</div>';
+    }
+    const checklist = (d.categories || []).map((c) => {
+      const rows = c.items.map((it) => {
+        const m = MARK[it.status] || MARK.info;
+        return '<div style="display:flex;gap:9px;padding:6px 0;border-bottom:1px solid #F0EBE1">' +
+          '<span style="color:' + m[0] + ';font-weight:800;width:14px">' + m[1] + '</span>' +
+          '<div style="font-size:12px"><b>' + esc(it.label) + '</b> <span style="color:#5B554B">\u2014 ' + esc(it.detail || "") + '</span>' +
+          (it.advice ? '<br><i style="color:#7a7568;font-size:11px">' + esc(it.advice) + '</i>' : "") + '</div></div>';
+      }).join("");
+      return '<div style="margin-top:12px"><div style="font-weight:800;font-size:13px;border-bottom:2px solid #17150F;padding-bottom:4px">' + c.name + ' <span style="color:' + hex(c.score) + '">' + c.score + '/100</span></div>' + rows + '</div>';
+    }).join("");
+
+    return '<div style="font-family:\'Plus Jakarta Sans\',sans-serif;color:#17150F;width:754px;padding:0">' +
+      '<div style="display:flex;justify-content:space-between;align-items:flex-start;border-bottom:3px solid #17150F;padding-bottom:12px">' +
+        '<div><div style="font-family:\'Fraunces\',serif;font-size:24px;font-weight:700">GEO<span style="color:#6D28D9">wallah</span></div>' +
+        '<div style="font-size:11px;color:#5B554B">AI &amp; SEO Visibility Report</div></div>' +
+        '<div style="text-align:right;font-size:11px;color:#5B554B">' + dt + '<br><b style="color:#17150F">' + esc(d.host || "") + '</b></div></div>' +
+      '<div style="display:flex;gap:18px;align-items:center;margin:16px 0">' +
+        '<div style="flex:0 0 auto;width:96px;height:96px;border-radius:50%;border:8px solid ' + sc + ';display:flex;flex-direction:column;align-items:center;justify-content:center">' +
+        '<div style="font-family:\'Fraunces\',serif;font-size:30px;font-weight:700;line-height:1">' + d.overall_score + '</div><div style="font-size:9px;color:#7a7568">/ 100</div></div>' +
+        '<div style="flex:1"><span style="display:inline-block;background:' + sc + ';color:#fff;font-size:11px;font-weight:800;padding:3px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:.05em">' + esc(d.grade || "") + '</span>' +
+        '<h2 style="font-family:\'Fraunces\',serif;font-size:20px;margin:7px 0 4px">Visibility score for ' + esc(d.host || "your site") + '</h2>' +
+        '<p style="font-size:12.5px;color:#3f3a31;margin:0">' + esc((d.ai && d.ai.verdict) || "How customers and AI engines currently see your business.") + '</p></div></div>' +
+      vis +
+      '<div style="margin:16px 0"><div style="font-size:11px;font-weight:800;letter-spacing:.08em;color:#6D28D9;text-transform:uppercase;margin-bottom:4px">Category scores</div>' + cats + '</div>' +
+      aiBlk +
+      '<div style="margin-top:18px"><div style="font-size:11px;font-weight:800;letter-spacing:.08em;color:#6D28D9;text-transform:uppercase">Full checklist \u2014 every check explained</div>' + checklist + '</div>' +
+      '<div style="margin-top:20px;padding:14px 18px;background:#17150F;color:#fff;border-radius:12px;text-align:center">' +
+        '<div style="font-family:\'Fraunces\',serif;font-size:15px">Want us to fix all of this for you?</div>' +
+        '<div style="font-size:12px;color:#cfc9bd;margin:3px 0 0">Free deeper audit + fixed-price plan \u00b7 WhatsApp +91 70038 88936 \u00b7 geowallah.com \u00b7 rankme@geowallah.com</div></div>' +
+      '<div style="text-align:center;font-size:10px;color:#9a9486;margin-top:8px">\u00a9 ' + new Date().getFullYear() + ' GEOwallah \u00b7 Made in Barrackpore \u00b7 GEO \u00b7 AEO \u00b7 SEO \u00b7 Local</div></div>';
+  }
+
+  async function generatePdf(btn) {
+    if (!lastData || typeof html2canvas === "undefined" || !window.jspdf) {
+      alert("Report tools are still loading — please try again in a moment.");
+      return;
+    }
+    const old = btn.innerHTML;
+    btn.disabled = true; btn.textContent = "Preparing PDF…";
+    const holder = document.createElement("div");
+    holder.style.cssText = "position:fixed;left:-10000px;top:0;width:794px;background:#fff;padding:20px;box-sizing:border-box";
+    holder.innerHTML = buildReportHTML(lastData);
+    document.body.appendChild(holder);
+    try {
+      const canvas = await html2canvas(holder, { scale: 2, backgroundColor: "#ffffff", useCORS: true });
+      const img = canvas.toDataURL("image/jpeg", 0.92);
+      const { jsPDF } = window.jspdf;
+      const pdf = new jsPDF("p", "mm", "a4");
+      const pw = 210, ph = 297;
+      const imgH = canvas.height * pw / canvas.width;
+      let left = imgH, pos = 0;
+      pdf.addImage(img, "JPEG", 0, pos, pw, imgH);
+      left -= ph;
+      while (left > 0) { pos -= ph; pdf.addPage(); pdf.addImage(img, "JPEG", 0, pos, pw, imgH); left -= ph; }
+      const host = (lastData.host || "site").replace(/[^a-z0-9.-]/gi, "");
+      pdf.save("GEOwallah-Audit-" + host + ".pdf");
+    } catch (err) {
+      alert("Sorry — couldn't generate the PDF. Please try again.");
+    } finally {
+      document.body.removeChild(holder);
+      btn.disabled = false; btn.innerHTML = old;
+    }
+  }
+
+  document.addEventListener("click", function (e) {
+    const b = e.target && e.target.closest && e.target.closest("#arPdf");
+    if (b) generatePdf(b);
   });
 
   // prefill from ?url=

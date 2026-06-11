@@ -272,7 +272,10 @@ h3{font-size:1.4rem;letter-spacing:-.01em}
 .quote .stars{color:var(--amber);letter-spacing:2px;margin-bottom:10px}
 .quote p{font-family:var(--font-d);font-size:1.05rem;line-height:1.5}
 .quote .who{display:flex;align-items:center;gap:12px;margin-top:16px}
-.quote .av{width:42px;height:42px;border-radius:50%;border:2px solid var(--ink);display:grid;place-items:center;font-weight:800;background:var(--paper-2)}
+.quote .av{flex:0 0 auto;width:44px;height:44px;border-radius:50%;border:2px solid var(--ink);display:grid;place-items:center;font-weight:800;font-size:.82rem;line-height:1;letter-spacing:.4px;background:var(--paper-2);color:var(--ink)}
+.quote:nth-child(1) .av{background:var(--teal-bright);color:#fff}
+.quote:nth-child(2) .av{background:var(--violet);color:#fff}
+.quote:nth-child(3) .av{background:var(--amber);color:var(--ink)}
 .quote .who b{font-size:.92rem}.quote .who span{font-size:.78rem;color:var(--ink-2);display:block}
 .quote .who b a{color:var(--teal);text-decoration:underline;text-underline-offset:2px}
 .quote .who b a:hover{color:var(--violet)}

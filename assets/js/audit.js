@@ -408,61 +408,245 @@
     pdf.text("\u00a9 " + new Date().getFullYear() + " GEOwallah \u00b7 Made in Barrackpore", 12, 291);
   }
 
-  async function generatePdf(btn) {
-    if (!lastData || typeof html2canvas === "undefined" || !window.jspdf) {
+  // Fully NATIVE PDF (real text + vector shapes — no screenshots), so nothing
+  // is ever clipped and the layout flows continuously with clean page breaks.
+  function generatePdf(btn) {
+    if (!lastData || !window.jspdf) {
       alert("Report tools are still loading — please try again in a moment.");
       return;
     }
     const old = btn.innerHTML;
     btn.disabled = true; btn.textContent = "Preparing PDF…";
-    const d = lastData;
-    const dt = new Date().toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
-    const CW = 744; // render width in px (maps to content width below)
-    const holder = document.createElement("div");
-    holder.style.cssText = "position:fixed;left:-10000px;top:0;width:" + CW + "px;background:#fff;font-family:'Plus Jakarta Sans',sans-serif";
-    holder.innerHTML = buildReportBlocks(d).map((h) => '<div class="pb" style="margin:0 0 10px">' + h + '</div>').join("");
-    document.body.appendChild(holder);
     try {
+      const d = lastData;
       const { jsPDF } = window.jspdf;
       const pdf = new jsPDF("p", "mm", "a4");
-      const pw = 210, contentW = pw - 24; // 12mm margins
-      const px2mm = contentW / CW;        // px -> mm scale
-      const top = 25, bottom = 283, gap = 3.2;
-      let y = top, page = 1;
-      drawChrome(pdf, d, dt);
-      const blocks = Array.from(holder.querySelectorAll(".pb"));
-      for (const el of blocks) {
-        const canvas = await html2canvas(el, { scale: 2, backgroundColor: "#ffffff", useCORS: true });
-        const hmm = canvas.height * px2mm * (CW / canvas.width); // robust to scale
-        const img = canvas.toDataURL("image/jpeg", 0.95);
-        if (hmm <= bottom - top) {
-          if (y + hmm > bottom) { pdf.addPage(); page++; drawChrome(pdf, d, dt); y = top; }
-          pdf.addImage(img, "JPEG", 12, y, contentW, hmm);
-          y += hmm + gap;
-        } else {
-          // taller than a full page (rare) — slice just this block safely
-          let remaining = hmm, srcY = 0;
-          const pageCap = bottom - top;
-          while (remaining > 0) {
-            if (y > top) { pdf.addPage(); page++; drawChrome(pdf, d, dt); y = top; }
-            const sliceMM = Math.min(pageCap, remaining);
-            const sliceCanvas = document.createElement("canvas");
-            sliceCanvas.width = canvas.width;
-            sliceCanvas.height = Math.round(sliceMM / px2mm / (CW / canvas.width));
-            const ctx = sliceCanvas.getContext("2d");
-            ctx.drawImage(canvas, 0, srcY, canvas.width, sliceCanvas.height, 0, 0, canvas.width, sliceCanvas.height);
-            pdf.addImage(sliceCanvas.toDataURL("image/jpeg", 0.95), "JPEG", 12, y, contentW, sliceMM);
-            srcY += sliceCanvas.height; remaining -= sliceMM; y = bottom + 1;
+      const M = 14, PW = 210, CW = PW - 2 * M, CTOP = 27, CBOT = 278;
+      const PT = 0.3527777778; // pt -> mm
+      const INK = "#17150F", GRY = "#5B554B", MUT = "#8A8475", VIO = "#6D28D9",
+        LINE = "#E7E1D5", CREAM = "#FBF9F4", WHITE = "#FFFFFF";
+      const dt = new Date().toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
+      let y = CTOP;
+
+      function rgbOf(h) { return [parseInt(h.slice(1, 3), 16), parseInt(h.slice(3, 5), 16), parseInt(h.slice(5, 7), 16)]; }
+      function tcol(h) { const c = rgbOf(h); pdf.setTextColor(c[0], c[1], c[2]); }
+      function dcol(h) { const c = rgbOf(h); pdf.setDrawColor(c[0], c[1], c[2]); }
+      function fcol(h) { const c = rgbOf(h); pdf.setFillColor(c[0], c[1], c[2]); }
+      function font(style, size) { pdf.setFont("helvetica", style); pdf.setFontSize(size); }
+      function lh(size, g) { return size * PT * (g || 1.32); }
+      function meas(txt, w, size, style) { font(style || "normal", size); return pdf.splitTextToSize(String(txt == null ? "" : txt), w); }
+
+      function chrome() {
+        font("bold", 15); tcol(INK); pdf.text("GEO", M, 13);
+        const w = pdf.getTextWidth("GEO"); tcol(VIO); pdf.text("wallah", M + w, 13);
+        font("normal", 8.5); tcol(GRY); pdf.text("AI & SEO Visibility Report", M, 17.6);
+        font("normal", 8.5); tcol(GRY); pdf.text(dt, PW - M, 11.5, { align: "right" });
+        font("bold", 9); tcol(INK); pdf.text(d.host || "", PW - M, 16, { align: "right" });
+        dcol(INK); pdf.setLineWidth(0.5); pdf.line(M, 20.5, PW - M, 20.5);
+        dcol(LINE); pdf.setLineWidth(0.3); pdf.line(M, 283, PW - M, 283);
+        font("normal", 7.5); tcol(MUT);
+        pdf.text("\u00a9 " + new Date().getFullYear() + " GEOwallah \u00b7 Made in Barrackpore", M, 288);
+        pdf.text("geowallah.com \u00b7 rankme@geowallah.com", PW - M, 288, { align: "right" });
+      }
+      function newpage() { pdf.addPage(); chrome(); y = CTOP; }
+      function need(h) { if (y + h > CBOT) newpage(); }
+      function gap(n) { y += n; }
+      // wrapped paragraph; breaks per line across pages
+      function para(txt, x, w, size, color, style, g) {
+        const L = meas(txt, w, size, style); const H = lh(size, g);
+        font(style || "normal", size); tcol(color || INK);
+        for (const ln of L) { need(H); pdf.text(ln, x, y, { baseline: "top" }); y += H; }
+        return L.length;
+      }
+      function kicker(t) {
+        need(9); font("bold", 9); tcol(VIO);
+        pdf.text(t.toUpperCase(), M, y, { baseline: "top", charSpace: 0.25 });
+        y += lh(9, 1.0) + 2.2;
+      }
+      function icon(cx, cy, st) {
+        const r = 2.0;
+        if (st === "pass") { fcol("#0EA98F"); pdf.circle(cx, cy, r, "F"); dcol(WHITE); pdf.setLineWidth(0.5); pdf.line(cx - 1, cy + 0.05, cx - 0.2, cy + 0.9); pdf.line(cx - 0.2, cy + 0.9, cx + 1.1, cy - 0.85); }
+        else if (st === "warn") { fcol("#F59E0B"); pdf.circle(cx, cy, r, "F"); dcol(WHITE); pdf.setLineWidth(0.5); pdf.line(cx, cy - 1, cx, cy + 0.3); fcol(WHITE); pdf.circle(cx, cy + 1.1, 0.32, "F"); }
+        else if (st === "fail") { fcol("#F97362"); pdf.circle(cx, cy, r, "F"); dcol(WHITE); pdf.setLineWidth(0.5); pdf.line(cx - 0.8, cy - 0.8, cx + 0.8, cy + 0.8); pdf.line(cx - 0.8, cy + 0.8, cx + 0.8, cy - 0.8); }
+        else { fcol(VIO); pdf.circle(cx, cy, r, "F"); }
+      }
+
+      chrome();
+
+      // ---- HERO: score ring + grade + verdict ----
+      {
+        const ringR = 13, textX = M + 38, textW = CW - 40;
+        const grade = (d.grade || "");
+        const verdict = (d.ai && d.ai.verdict) || "How customers and AI engines currently see your business.";
+        const titleL = meas("Visibility score for " + (d.host || "your site"), textW, 15, "bold");
+        const verdL = meas(verdict, textW, 10, "normal");
+        const textH = 8 + titleL.length * lh(15, 1.2) + 2 + verdL.length * lh(10, 1.35);
+        const boxH = Math.max(36, textH + 12);
+        need(boxH + 3);
+        const top = y;
+        fcol(CREAM); dcol(LINE); pdf.setLineWidth(0.3); pdf.roundedRect(M, top, CW, boxH, 3, 3, "FD");
+        const cx = M + 8 + ringR, cy = top + boxH / 2;
+        dcol("#EDE7DB"); pdf.setLineWidth(3.2); pdf.circle(cx, cy, ringR, "S");
+        dcol(hex(d.overall_score)); pdf.setLineWidth(3.2); pdf.circle(cx, cy, ringR, "S");
+        font("bold", 25); tcol(INK); pdf.text(String(d.overall_score), cx, cy + 0.5, { align: "center", baseline: "middle" });
+        font("normal", 7.5); tcol(MUT); pdf.text("/ 100", cx, cy + 7, { align: "center", baseline: "middle" });
+        let ty = top + (boxH - textH) / 2;
+        font("bold", 8.5); const gw = pdf.getTextWidth(grade.toUpperCase()) + 9;
+        fcol(hex(d.overall_score)); pdf.roundedRect(textX, ty, gw, 6.2, 3.1, 3.1, "F");
+        tcol(WHITE); pdf.text(grade.toUpperCase(), textX + gw / 2, ty + 3.2, { align: "center", baseline: "middle", charSpace: 0.2 });
+        ty += 9;
+        font("bold", 15); tcol(INK); for (const ln of titleL) { pdf.text(ln, textX, ty, { baseline: "top" }); ty += lh(15, 1.2); }
+        ty += 2;
+        font("normal", 10); tcol(GRY); for (const ln of verdL) { pdf.text(ln, textX, ty, { baseline: "top" }); ty += lh(10, 1.35); }
+        y = top + boxH + 7;
+      }
+
+      // ---- AI SEARCH VISIBILITY ----
+      const v = d.ai_visibility;
+      if (v && v.checked) {
+        kicker("AI Search Visibility");
+        para("Tested live query: \u201c" + (v.query || "") + "\u201d", M, CW, 10.5, INK, "bold", 1.3); gap(1);
+        para(v.verdict || "", M, CW, 10, GRY, "normal", 1.4); gap(3.5);
+
+        const cards = v.engines || [];
+        const n = cards.length || 1, cg = 3, cwd = (CW - cg * (n - 1)) / n, ch = 23;
+        need(ch + 4);
+        const ctop = y;
+        cards.forEach((e, i) => {
+          const x = M + i * (cwd + cg);
+          fcol(WHITE); dcol(LINE); pdf.setLineWidth(0.3); pdf.roundedRect(x, ctop, cwd, ch, 2.5, 2.5, "FD");
+          font("bold", 10); tcol(INK); pdf.text(e.name || "", x + 4, ctop + 5.5, { baseline: "middle" });
+          font("normal", 7); tcol(MUT);
+          const via = meas(e.via || "", cwd - 8, 7, "normal"); let vy = ctop + 9;
+          for (const ln of via.slice(0, 2)) { pdf.text(ln, x + 4, vy, { baseline: "top" }); vy += lh(7, 1.2); }
+          const lbl = e.found ? (e.position ? "#" + e.position : "Named") : "Not named";
+          font("bold", 8.5); const pw2 = pdf.getTextWidth(lbl) + 7;
+          fcol(e.found ? "#0EA98F" : "#C2410C"); pdf.roundedRect(x + 4, ctop + ch - 8, pw2, 5.6, 2.8, 2.8, "F");
+          tcol(WHITE); pdf.text(lbl, x + 4 + pw2 / 2, ctop + ch - 5.1, { align: "center", baseline: "middle" });
+          if (e.real || e.name === "Gemini") {
+            font("bold", 6.5); const lw = pdf.getTextWidth("LIVE") + 4;
+            fcol(VIO); pdf.roundedRect(x + cwd - lw - 3, ctop + 3, lw, 4.2, 2, 2, "F");
+            tcol(WHITE); pdf.text("LIVE", x + cwd - lw - 3 + lw / 2, ctop + 5.1, { align: "center", baseline: "middle" });
           }
-          y = top; pdf.addPage(); page++; drawChrome(pdf, d, dt);
+        });
+        y = ctop + ch + 6;
+
+        const g = v.gemini;
+        if (g && g.checked && g.answer) {
+          const innerW = CW - 12;
+          const t1 = "What Gemini actually answers \u00b7 " + (g.named ? (g.position ? "names you #" + g.position : "names you") : "doesn\u2019t name you") + " (live)";
+          const t1L = meas(t1, innerW, 9.5, "bold");
+          const vL = g.verdict ? meas(g.verdict, innerW, 9.5, "bold") : [];
+          const aL = meas(g.answer, innerW - 4, 9, "italic");
+          const boxH = 4 + t1L.length * lh(9.5, 1.3) + 1 + vL.length * lh(9.5, 1.3) + 2.5 + aL.length * lh(9, 1.4) + 3 + lh(7.5, 1.2) + 3;
+          need(boxH + 3);
+          const top = y;
+          fcol("#F6F2FC"); dcol(VIO); pdf.setLineWidth(0.5); pdf.roundedRect(M, top, CW, boxH, 3, 3, "FD");
+          let iy = top + 4;
+          font("bold", 9.5); tcol(VIO); for (const ln of t1L) { pdf.text(ln, M + 6, iy, { baseline: "top" }); iy += lh(9.5, 1.3); }
+          iy += 1;
+          font("bold", 9.5); tcol(GRY); for (const ln of vL) { pdf.text(ln, M + 6, iy, { baseline: "top" }); iy += lh(9.5, 1.3); }
+          iy += 2.5;
+          dcol(VIO); pdf.setLineWidth(1.1); pdf.line(M + 6, iy + 0.5, M + 6, iy + aL.length * lh(9, 1.4) - 0.5);
+          font("italic", 9); tcol("#5B554B"); for (const ln of aL) { pdf.text(ln, M + 10, iy, { baseline: "top" }); iy += lh(9, 1.4); }
+          iy += 3;
+          font("normal", 7.5); tcol(MUT); pdf.text("Real Gemini answer with Google Search grounding (" + (g.model || "") + ") \u2014 not invented.", M + 6, iy, { baseline: "top" });
+          y = top + boxH + 6;
+        }
+
+        if (v.competitors && v.competitors.length && (!v.found || v.position > 1)) {
+          para("Who AI is naming instead:", M, CW, 10, INK, "bold", 1.3); gap(0.5);
+          v.competitors.slice(0, 5).forEach((c, i) => { para((i + 1) + ". " + (c.domain || "") + " \u2014 " + (c.title || ""), M + 2, CW - 2, 9.5, GRY, "normal", 1.35); gap(0.6); });
+          gap(2.5);
         }
       }
+
+      // ---- CATEGORY SCORES ----
+      kicker("Category scores");
+      (d.categories || []).forEach((c) => {
+        need(11);
+        font("bold", 10); tcol(INK); pdf.text(c.name, M, y, { baseline: "top" });
+        font("bold", 10); tcol(hex(c.score)); pdf.text(c.score + "/100", PW - M, y, { align: "right", baseline: "top" });
+        y += lh(10, 1.2) + 1.2;
+        fcol("#EFEAE0"); pdf.roundedRect(M, y, CW, 2.8, 1.4, 1.4, "F");
+        fcol(hex(c.score)); pdf.roundedRect(M, y, Math.max(2.8, CW * c.score / 100), 2.8, 1.4, 1.4, "F");
+        y += 2.8 + 5.5;
+      });
+      gap(2);
+
+      // ---- WHAT TO FIX FIRST ----
+      if (d.ai && (d.ai.priorities || d.ai.meta_description)) {
+        kicker("What to fix first");
+        (d.ai.priorities || []).forEach((p, i) => {
+          para((i + 1) + ". " + (p.action || ""), M, CW, 10, INK, "bold", 1.3); gap(0.5);
+          if (p.why) para(p.why, M + 5, CW - 5, 9.5, GRY, "normal", 1.35);
+          gap(2.8);
+        });
+        if (d.ai.meta_description) {
+          para("Ready-to-use meta description", M, CW, 9.5, INK, "bold", 1.3); gap(1.2);
+          const mL = meas(d.ai.meta_description, CW - 10, 9.5, "normal");
+          const bH = mL.length * lh(9.5, 1.4) + 7; need(bH + 2);
+          const top = y; fcol(CREAM); dcol(LINE); pdf.setLineWidth(0.3); pdf.roundedRect(M, top, CW, bH, 2.5, 2.5, "FD");
+          let iy = top + 3.5; font("normal", 9.5); tcol(GRY); for (const ln of mL) { pdf.text(ln, M + 5, iy, { baseline: "top" }); iy += lh(9.5, 1.4); }
+          y = top + bH + 4.5;
+        }
+        if (d.ai.faqs && d.ai.faqs.length) {
+          para("FAQ questions to answer (for AI/voice search)", M, CW, 9.5, INK, "bold", 1.3); gap(1.2);
+          d.ai.faqs.forEach((q) => {
+            need(lh(9.5, 1.35)); font("bold", 9.5); tcol(VIO); pdf.text("\u2022", M + 2, y, { baseline: "top" });
+            para(q, M + 7, CW - 7, 9.5, GRY, "normal", 1.35); gap(0.6);
+          });
+        }
+        gap(2);
+      }
+
+      // ---- FULL CHECKLIST ----
+      need(11);
+      font("bold", 9.5); tcol(VIO); pdf.text("FULL CHECKLIST \u2014 EVERY CHECK EXPLAINED", M, y, { baseline: "top", charSpace: 0.25 });
+      y += lh(9.5, 1.1) + 2;
+      dcol(VIO); pdf.setLineWidth(0.5); pdf.line(M, y, PW - M, y); y += 4.5;
+      (d.categories || []).forEach((c) => {
+        need(13);
+        font("bold", 11); tcol(INK); pdf.text(c.name, M, y, { baseline: "top" });
+        font("bold", 11); tcol(hex(c.score)); pdf.text(c.score + "/100", PW - M, y, { align: "right", baseline: "top" });
+        y += lh(11, 1.15) + 1.2;
+        dcol(INK); pdf.setLineWidth(0.4); pdf.line(M, y, PW - M, y); y += 3.8;
+        (c.items || []).forEach((it) => {
+          const tx = M + 8, tw = CW - 8;
+          const labL = meas(it.label, tw, 9.5, "bold");
+          const detL = it.detail ? meas(it.detail, tw, 9, "normal") : [];
+          const advL = it.advice ? meas(it.advice, tw, 8.5, "italic") : [];
+          const rowH = labL.length * lh(9.5, 1.25) + detL.length * lh(9, 1.3) + advL.length * lh(8.5, 1.3) + 4.5;
+          need(rowH);
+          const rtop = y;
+          icon(M + 2.2, rtop + 1.9, it.status);
+          let iy = rtop;
+          font("bold", 9.5); tcol(INK); for (const ln of labL) { pdf.text(ln, tx, iy, { baseline: "top" }); iy += lh(9.5, 1.25); }
+          if (detL.length) { font("normal", 9); tcol(GRY); for (const ln of detL) { pdf.text(ln, tx, iy, { baseline: "top" }); iy += lh(9, 1.3); } }
+          if (advL.length) { font("italic", 8.5); tcol(MUT); for (const ln of advL) { pdf.text(ln, tx, iy, { baseline: "top" }); iy += lh(8.5, 1.3); } }
+          y = rtop + rowH;
+          dcol("#F0EBE1"); pdf.setLineWidth(0.2); pdf.line(tx, y - 1.8, PW - M, y - 1.8);
+        });
+        y += 4;
+      });
+
+      // ---- CTA band (flows after checklist; no empty page) ----
+      {
+        const bh = 22; need(bh + 2);
+        const top = y;
+        fcol(INK); pdf.roundedRect(M, top, CW, bh, 3, 3, "F");
+        font("bold", 13); tcol(WHITE); pdf.text("Want us to fix all of this for you?", PW / 2, top + 7, { align: "center", baseline: "middle" });
+        font("normal", 9); tcol("#CFC9BD");
+        pdf.text("Free deeper audit + fixed-price plan \u00b7 WhatsApp +91 70038 88936", PW / 2, top + 13, { align: "center", baseline: "middle" });
+        pdf.text("geowallah.com \u00b7 rankme@geowallah.com", PW / 2, top + 17.5, { align: "center", baseline: "middle" });
+        y = top + bh + 2;
+      }
+
       const host = (d.host || "site").replace(/[^a-z0-9.-]/gi, "");
       pdf.save("GEOwallah-Audit-" + host + ".pdf");
     } catch (err) {
       alert("Sorry — couldn't generate the PDF. Please try again.");
     } finally {
-      document.body.removeChild(holder);
       btn.disabled = false; btn.innerHTML = old;
     }
   }

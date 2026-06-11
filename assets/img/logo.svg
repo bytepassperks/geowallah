@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <defs>
+    <linearGradient id="gw" x1="8" y1="6" x2="56" y2="58" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#14B8A6"/>
+      <stop offset="0.45" stop-color="#22D3EE"/>
+      <stop offset="1" stop-color="#6D28D9"/>
+    </linearGradient>
+  </defs>
+  <!-- pin body -->
+  <path d="M32 4c-12.7 0-23 10.0-23 22.4C9 41 24.5 56.4 30 60.6c1.2.9 2.8.9 4 0C39.5 56.4 55 41 55 26.4 55 14 44.7 4 32 4Z"
+        stroke="url(#gw)" stroke-width="3" fill="rgba(34,211,238,0.06)"/>
+  <!-- network nodes inside -->
+  <g stroke="url(#gw)" stroke-width="1.6">
+    <line x1="32" y1="16" x2="22" y2="27"/>
+    <line x1="32" y1="16" x2="42" y2="27"/>
+    <line x1="22" y1="27" x2="32" y2="38"/>
+    <line x1="42" y1="27" x2="32" y2="38"/>
+    <line x1="22" y1="27" x2="42" y2="27"/>
+  </g>
+  <g fill="#22D3EE">
+    <circle cx="32" cy="16" r="3.4"/>
+    <circle cx="22" cy="27" r="3"/>
+    <circle cx="42" cy="27" r="3"/>
+    <circle cx="32" cy="38" r="3.2" fill="#6D28D9"/>
+  </g>
+  <!-- amber spark -->
+  <circle cx="44" cy="15" r="2.2" fill="#F59E0B"/>
+</svg>

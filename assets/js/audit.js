@@ -214,11 +214,12 @@
     (v.engines || []).forEach((e) => {
       const ok = e.found;
       const el = document.createElement("div");
-      el.className = "av-eng " + (ok ? "ok" : "no");
+      el.className = "av-eng " + (ok ? "ok" : "no") + (e.real ? " real" : "");
       el.innerHTML =
+        (e.real ? '<span class="ave-real">LIVE</span>' : "") +
         '<div class="ave-ic">' + (ENGINE_ICON[e.name] || "") + "</div>" +
         '<div class="ave-b"><b>' + e.name + "</b><small>" + esc(e.via) + "</small></div>" +
-        '<span class="ave-tag">' + (ok ? (e.position ? "#" + e.position : "Found") : "Not found") + "</span>";
+        '<span class="ave-tag">' + (ok ? (e.position ? "#" + e.position : "Named") : "Not named") + "</span>";
       eng.appendChild(el);
     });
 
@@ -235,6 +236,33 @@
     } else {
       comp.hidden = true;
     }
+
+    // Real, grounded Gemini answer (when an AI Studio key is configured)
+    let gem = document.getElementById("avGem");
+    const g = v.gemini;
+    if (g && g.checked && g.answer) {
+      if (!gem) {
+        gem = document.createElement("div");
+        gem.id = "avGem";
+        gem.className = "av-gem";
+        comp.parentNode.insertBefore(gem, comp.nextSibling);
+      }
+      gem.hidden = false;
+      gem.className = "av-gem " + (g.named ? "ok" : "no");
+      gem.innerHTML =
+        '<div class="avg-head">' + (ENGINE_ICON.Gemini || "") +
+        "<b>What Gemini actually answers</b>" +
+        '<span class="avg-tag">' +
+        (g.named ? (g.position ? "Names you #" + g.position : "Names you") : "Doesn't name you") +
+        " \u00b7 live</span></div>" +
+        '<p class="avg-verdict">' + esc(g.verdict || "") + "</p>" +
+        '<blockquote class="avg-quote">' + esc(g.answer) + "</blockquote>" +
+        '<small class="avg-src">Real Gemini answer with Google Search grounding (' +
+        esc(g.model || "gemini") + ") \u2014 not invented.</small>";
+    } else if (gem) {
+      gem.hidden = true;
+    }
+
     const note = "We ran your real query on live web results \u2014 the same index ChatGPT (via Bing), " +
       "Gemini & Google AI Overviews read from. We report exactly what we measured, never a fake \u201cAI recommends you\u201d.";
     document.getElementById("avNote").textContent = v.note ? v.note + " " + note : note;
@@ -273,20 +301,32 @@
     if (v && v.checked) {
       const eng = (v.engines || []).map((e) =>
         '<td style="padding:9px 10px;border:1px solid #E7E1D5;font-size:12.5px">' +
-        '<b>' + e.name + '</b><br><span style="color:#7a7568;font-size:10.5px">' + esc(e.via) + '</span><br>' +
+        '<b>' + e.name + '</b>' + (e.real ? ' <span style="font-size:8.5px;font-weight:800;color:#fff;background:#6D28D9;padding:1px 4px;border-radius:4px;vertical-align:middle">LIVE</span>' : "") +
+        '<br><span style="color:#7a7568;font-size:10.5px">' + esc(e.via) + '</span><br>' +
         '<span style="color:' + (e.found ? "#0EA98F" : "#C2410C") + ';font-weight:700">' +
-        (e.found ? (e.position ? "Appears \u2014 #" + e.position : "Appears") : "Not found") + '</span></td>').join("");
+        (e.found ? (e.position ? "#" + e.position : "Named") : "Not named") + '</span></td>').join("");
       let comp = "";
       if (v.competitors && v.competitors.length && (!v.found || v.position > 1)) {
         comp = '<p style="margin:10px 0 4px;font-weight:700;font-size:12.5px">Who AI is naming instead:</p><ol style="margin:0 0 0 18px;padding:0;font-size:12px;color:#3f3a31">' +
           v.competitors.slice(0, 5).map((c) => '<li style="margin:2px 0"><b>' + esc(c.domain) + '</b> \u2014 ' + esc(c.title) + '</li>').join("") + '</ol>';
+      }
+      let gemBlk = "";
+      const g = v.gemini;
+      if (g && g.checked && g.answer) {
+        gemBlk =
+          '<div style="margin-top:12px;padding:12px 14px;border:1.5px solid #6D28D9;border-radius:10px;background:#F6F2FC">' +
+          '<div style="font-size:12.5px;font-weight:800;color:#6D28D9">What Gemini actually answers \u00b7 ' +
+          (g.named ? (g.position ? "names you #" + g.position : "names you") : "doesn\u2019t name you") + ' (live)</div>' +
+          '<p style="margin:5px 0 7px;font-size:12px;color:#3f3a31;font-weight:600">' + esc(g.verdict || "") + '</p>' +
+          '<div style="font-size:11.5px;font-style:italic;color:#5B554B;border-left:3px solid #6D28D9;padding:6px 10px;background:#fff;border-radius:0 8px 8px 0">' + esc(g.answer) + '</div>' +
+          '<div style="font-size:9.5px;color:#7a7568;margin-top:6px">Real Gemini answer with Google Search grounding \u2014 not invented.</div></div>';
       }
       vis =
         '<div style="margin:16px 0;padding:16px 18px;border:2px solid #17150F;border-radius:12px;background:#FBF9F4">' +
         '<div style="font-size:11px;font-weight:800;letter-spacing:.08em;color:#6D28D9;text-transform:uppercase">AI Search Visibility</div>' +
         '<p style="margin:6px 0 4px;font-size:13px">Tested live query: <b>\u201c' + esc(v.query) + '\u201d</b></p>' +
         '<p style="margin:0 0 10px;font-size:12.5px;color:#3f3a31">' + esc(v.verdict) + '</p>' +
-        '<table style="border-collapse:collapse;width:100%"><tr>' + eng + '</tr></table>' + comp + '</div>';
+        '<table style="border-collapse:collapse;width:100%"><tr>' + eng + '</tr></table>' + comp + gemBlk + '</div>';
     }
     const cats = (d.categories || []).map((c) =>
       '<div style="display:flex;align-items:center;gap:10px;margin:7px 0">' +

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Free AI &amp; SEO Visibility Audit — GEOwallah</title>
+<meta name="description" content="Run a free instant audit of your website's visibility across Google, AI engines (ChatGPT, Gemini) and local search. Get a real score, prioritised fixes and AI-generated recommendations — no signup.">
+<meta name="theme-color" content="#FAF7F1">
+<meta property="og:title" content="Free AI &amp; SEO Visibility Audit — GEOwallah">
+<meta property="og:description" content="Get an instant score for how visible your business is on Google, AI search and Maps — plus the exact fixes.">
+<meta property="og:image" content="assets/img/favicon-512.png">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32.png">
+<link rel="apple-touch-icon" href="assets/img/favicon-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css?v=20260611c">
+</head>
+<body>
+<div class="progress"></div>
+
+<header class="nav">
+  <div class="container">
+    <a class="brand" href="index.html"><img class="logo" src="assets/img/logo.png" alt="GEOwallah logo"><span><b>GEO</b>wallah</span></a>
+    <nav class="nav-links">
+      <a href="index.html">Home</a><a href="services.html">Services</a><a href="pricing.html">Pricing</a><a href="about.html">About</a><a href="blog.html">Blog</a><a href="contact.html">Contact</a>
+    </nav>
+    <div class="nav-cta">
+      <a class="btn btn-ghost btn-sm" href="audit.html">Free audit</a>
+      <a class="btn btn-primary btn-sm" href="https://wa.me/917003888936" target="_blank" rel="noopener">Talk to us</a>
+    </div>
+    <button class="nav-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<!-- AUDIT HERO + FORM -->
+<section class="section audit-hero">
+  <div class="container">
+    <div class="shead center" data-reveal>
+      <span class="kicker" style="justify-content:center"><span class="num">✦</span><span class="dash"></span> Free instant tool</span>
+      <h1 style="font-size:clamp(2.3rem,5.4vw,4rem);margin:14px 0">Are you visible on <span class="mark">Google</span> &amp; <span class="mark violet">AI search</span>?</h1>
+      <p class="lead">Enter your website and get an instant visibility score across Google SEO, AI/answer engines and local search — plus the exact, prioritised fixes. No signup, results in seconds.</p>
+    </div>
+
+    <form id="auditForm" class="audit-form block" data-reveal>
+      <div class="af-row">
+        <label class="af-field af-grow">
+          <span>Your website <i>*</i></span>
+          <input type="text" id="afUrl" name="url" placeholder="yourbusiness.com" autocomplete="url" required>
+        </label>
+        <button type="submit" class="btn btn-primary af-go">Run my free audit
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </button>
+      </div>
+      <div class="af-row af-optional">
+        <label class="af-field"><span>Business name <small>(optional)</small></span><input type="text" id="afName" placeholder="e.g. Emily's Pet Heaven"></label>
+        <label class="af-field"><span>City / area <small>(optional)</small></span><input type="text" id="afCity" placeholder="e.g. Barrackpore"></label>
+        <label class="af-field"><span>Category <small>(optional)</small></span><input type="text" id="afCat" placeholder="e.g. pet boarding"></label>
+      </div>
+      <p class="af-hint">Tip: add your business name &amp; city for sharper, AI-personalised recommendations.</p>
+    </form>
+
+    <!-- LOADING -->
+    <div id="auditLoading" class="audit-loading block" hidden>
+      <div class="al-spinner"></div>
+      <h3 id="alTitle">Scanning your website…</h3>
+      <ul class="al-steps">
+        <li data-step="fetch">Fetching your site</li>
+        <li data-step="seo">Checking SEO foundations</li>
+        <li data-step="ai">Testing AI &amp; answer-engine readiness</li>
+        <li data-step="local">Inspecting local signals</li>
+        <li data-step="insight">Asking AI for recommendations</li>
+      </ul>
+    </div>
+
+    <!-- ERROR -->
+    <div id="auditError" class="audit-error block" hidden>
+      <h3>We couldn't scan that site automatically</h3>
+      <p id="aeMsg"></p>
+      <p>No problem — we'll run a full manual audit for you, free.</p>
+      <div class="cta-actions">
+        <a class="btn btn-wa" href="https://wa.me/917003888936?text=Hi%20GEOwallah%2C%20please%20run%20a%20free%20audit%20for%20my%20website" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="#06351b"><path d="M12 2a10 10 0 0 0-8.6 15l-1.4 5 5.1-1.3A10 10 0 1 0 12 2Z"/></svg>
+          Get a free manual audit</a>
+        <button class="btn btn-ghost" type="button" onclick="document.getElementById('auditError').hidden=true;document.getElementById('auditForm').scrollIntoView({behavior:'smooth'})">Try another URL</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RESULTS -->
+<section id="auditResults" class="section audit-results" hidden>
+  <div class="container">
+
+    <div class="ar-top block">
+      <div class="ar-gauge">
+        <svg viewBox="0 0 120 120" class="gauge">
+          <circle class="g-track" cx="60" cy="60" r="52"></circle>
+          <circle class="g-fill" cx="60" cy="60" r="52"></circle>
+        </svg>
+        <div class="g-center"><b id="arScore">0</b><span>/ 100</span></div>
+      </div>
+      <div class="ar-headline">
+        <span class="ar-grade" id="arGrade">—</span>
+        <h2>Visibility score for <span id="arHost" class="mark">your site</span></h2>
+        <p id="arVerdict" class="lead">Here's how customers and AI engines currently see your business.</p>
+        <div class="ar-cta">
+          <a class="btn btn-primary" href="https://wa.me/917003888936?text=Hi%20GEOwallah%2C%20I%20ran%20the%20free%20audit%20and%20want%20help%20fixing%20my%20visibility" target="_blank" rel="noopener">Fix this for me — free plan</a>
+          <a class="btn btn-ghost" href="pricing.html">See packages</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="ar-cats" id="arCats"></div>
+
+    <div class="ar-ai block" id="arAi" hidden>
+      <span class="kicker"><span class="num">AI</span><span class="dash"></span> Recommendations by AI</span>
+      <h3>What to fix first</h3>
+      <div class="ar-priorities" id="arPriorities"></div>
+      <div class="ar-extra">
+        <div class="ar-meta">
+          <h4>Ready-to-use meta description</h4>
+          <div class="copybox"><code id="arMeta"></code><button class="btn btn-sm btn-ghost" type="button" id="arMetaCopy">Copy</button></div>
+        </div>
+        <div class="ar-faqs">
+          <h4>FAQ questions your site should answer <small>(for AI/voice search)</small></h4>
+          <ul id="arFaqs"></ul>
+        </div>
+      </div>
+      <p class="ai-note">AI analysis of your live page by GEOwallah, powered by Cloudflare Workers AI. We can't speak for ChatGPT/Gemini's exact answer — we verify real AI citations for you manually in the full audit.</p>
+    </div>
+
+    <div class="ar-detail" id="arDetail"></div>
+
+    <div class="cta-band ar-band" data-reveal>
+      <h2>Want us to fix all of this <span class="mark">for you</span>?</h2>
+      <p class="lead">Get a free, deeper audit + a prioritised action plan and fixed-price quote. We'll get you found on Google, cited by AI and chosen locally.</p>
+      <div class="cta-actions">
+        <a class="btn btn-primary" href="contact.html">Get my free plan</a>
+        <a class="btn btn-wa" href="https://wa.me/917003888936" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="#06351b"><path d="M12 2a10 10 0 0 0-8.6 15l-1.4 5 5.1-1.3A10 10 0 1 0 12 2Z"/></svg>
+          Chat on WhatsApp</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="foot-grid">
+      <div>
+        <a class="brand" href="index.html"><img class="logo" src="assets/img/logo.png" alt="GEOwallah"><span><b>GEO</b>wallah</span></a>
+        <p>Get found on Google. Get cited by AI. Get chosen locally. AI-search optimization rooted in Barrackpore, serving all of India.</p>
+        <div class="socials">
+          <a href="https://www.instagram.com/geowallahagency/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg></a>
+          <a href="https://www.facebook.com/geowallah" target="_blank" rel="noopener" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M15 3h-3a4 4 0 0 0-4 4v3H5v4h3v7h4v-7h3l1-4h-4V7a1 1 0 0 1 1-1h3Z"/></svg></a>
+          <a href="https://www.linkedin.com/company/geowallah/" target="_blank" rel="noopener" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 11v5M8 8v.01M12 16v-3a2 2 0 0 1 4 0v3"/></svg></a>
+        </div>
+      </div>
+      <div><h4>Services</h4><a href="services.html">AI GEO / LLM</a><a href="services.html">SEO &amp; AI SEO</a><a href="services.html">Local SEO &amp; GMB</a><a href="services.html">Web Development</a><a href="services.html">Content &amp; Citations</a></div>
+      <div><h4>Company</h4><a href="about.html">About</a><a href="pricing.html">Pricing</a><a href="blog.html">Blog</a><a href="contact.html">Contact</a></div>
+      <div><h4>Get in touch</h4><a href="https://wa.me/917003888936">WhatsApp</a><a href="mailto:rankme@geowallah.com">rankme@geowallah.com</a><a href="audit.html">Free audit</a><span style="color:#8b857a;font-size:.84rem;display:block;padding-top:8px">Barrackpore, North 24 Parganas, WB</span></div>
+    </div>
+    <div class="foot-bottom">
+      <span>© <span id="year">2025</span> GEOwallah. All rights reserved.</span>
+      <span>Made in Barrackpore 🇮🇳 · GEO · AEO · SEO · Local</span>
+    </div>
+  </div>
+</footer>
+
+<a class="wa-float" href="https://wa.me/917003888936" target="_blank" rel="noopener" aria-label="WhatsApp">
+  <svg viewBox="0 0 24 24" fill="#fff"><path d="M12 2a10 10 0 0 0-8.6 15l-1.4 5 5.1-1.3A10 10 0 1 0 12 2Zm5.8 14.2c-.2.7-1.4 1.3-2 1.4-.5.1-1.2.1-1.9-.1-.4-.1-1-.3-1.7-.6-3-1.3-4.9-4.3-5.1-4.5-.1-.2-1.2-1.6-1.2-3s.7-2.1 1-2.4c.2-.3.5-.4.7-.4h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.3 0 .5l-.4.5c-.2.2-.3.4-.1.7.2.3.9 1.4 1.9 2.3 1.3 1.1 2.3 1.5 2.6 1.6.2.1.4.1.5-.1l.7-.9c.2-.2.4-.2.6-.1l2 .9c.3.1.4.2.4.4.1.2.1.9-.1 1.6Z"/></svg>
+</a>
+<script src="assets/js/main.js"></script>
+<script src="assets/js/audit.js?v=20260611c"></script>
+</body>
+</html>

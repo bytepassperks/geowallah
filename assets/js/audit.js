@@ -361,7 +361,7 @@
     }
 
     // Checklist section label (its own small block)
-    B.push('<div style="font-size:11px;font-weight:800;letter-spacing:.08em;color:#6D28D9;text-transform:uppercase;padding-top:2px">Full checklist \u2014 every check explained</div>');
+    B.push('<div style="font-size:11px;font-weight:800;letter-spacing:.08em;color:#6D28D9;text-transform:uppercase;background:#fff;padding:4px 2px 6px;border-bottom:2px solid #6D28D9">Full checklist \u2014 every check explained</div>');
     // One block per category so rows are never sliced across pages
     (d.categories || []).forEach((c) => {
       const rows = c.items.map((it) => {
@@ -432,7 +432,7 @@
       drawChrome(pdf, d, dt);
       const blocks = Array.from(holder.querySelectorAll(".pb"));
       for (const el of blocks) {
-        const canvas = await html2canvas(el, { scale: 2, backgroundColor: null, useCORS: true });
+        const canvas = await html2canvas(el, { scale: 2, backgroundColor: "#ffffff", useCORS: true });
         const hmm = canvas.height * px2mm * (CW / canvas.width); // robust to scale
         const img = canvas.toDataURL("image/jpeg", 0.95);
         if (hmm <= bottom - top) {

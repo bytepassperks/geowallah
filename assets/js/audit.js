@@ -293,87 +293,119 @@
   }
   const MARK = { pass: ["#0EA98F", "\u2713"], warn: ["#F59E0B", "\u26A0"], fail: ["#F97362", "\u2717"], info: ["#6D28D9", "i"] };
 
-  function buildReportHTML(d) {
-    const dt = new Date().toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
+  // Build the report as a list of atomic "blocks". Each block is rendered to
+  // its own image and placed on a page without ever being sliced, so nothing
+  // gets clipped across page breaks.
+  function buildReportBlocks(d) {
     const sc = hex(d.overall_score);
     const v = d.ai_visibility;
-    let vis = "";
+    const B = []; // { html, pad } blocks, in order
+
+    // Hero: score + grade + verdict
+    B.push('<div style="display:flex;gap:18px;align-items:center;padding:18px 20px;border:1px solid #E7E1D5;border-radius:14px;background:linear-gradient(180deg,#FBF9F4,#fff)">' +
+      '<div style="flex:0 0 auto;width:92px;height:92px;border-radius:50%;border:8px solid ' + sc + ';display:flex;flex-direction:column;align-items:center;justify-content:center">' +
+      '<div style="font-family:\'Fraunces\',serif;font-size:30px;font-weight:700;line-height:1;color:#17150F">' + d.overall_score + '</div><div style="font-size:9px;color:#7a7568">/ 100</div></div>' +
+      '<div style="flex:1"><span style="display:inline-block;background:' + sc + ';color:#fff;font-size:11px;font-weight:800;padding:3px 11px;border-radius:20px;text-transform:uppercase;letter-spacing:.05em">' + esc(d.grade || "") + '</span>' +
+      '<h2 style="font-family:\'Fraunces\',serif;font-size:21px;margin:7px 0 4px;color:#17150F">Visibility score for ' + esc(d.host || "your site") + '</h2>' +
+      '<p style="font-size:12.5px;color:#3f3a31;margin:0;line-height:1.5">' + esc((d.ai && d.ai.verdict) || "How customers and AI engines currently see your business.") + '</p></div></div>');
+
+    // AI Search Visibility panel (engine cards as flex, not a fragile table)
     if (v && v.checked) {
       const eng = (v.engines || []).map((e) =>
-        '<td style="padding:9px 10px;border:1px solid #E7E1D5;font-size:12.5px">' +
-        '<b>' + e.name + '</b>' + (e.real ? ' <span style="font-size:8.5px;font-weight:800;color:#fff;background:#6D28D9;padding:1px 4px;border-radius:4px;vertical-align:middle">LIVE</span>' : "") +
-        '<br><span style="color:#7a7568;font-size:10.5px">' + esc(e.via) + '</span><br>' +
-        '<span style="color:' + (e.found ? "#0EA98F" : "#C2410C") + ';font-weight:700">' +
-        (e.found ? (e.position ? "#" + e.position : "Named") : "Not named") + '</span></td>').join("");
+        '<div style="flex:1 1 0;min-width:0;padding:10px 11px;border:1px solid #E7E1D5;border-radius:10px;background:#fff;position:relative">' +
+        (e.real ? '<span style="position:absolute;top:7px;right:7px;font-size:8px;font-weight:800;color:#fff;background:#6D28D9;padding:1px 5px;border-radius:5px">LIVE</span>' : "") +
+        '<div style="font-weight:800;font-size:13px;color:#17150F">' + e.name + '</div>' +
+        '<div style="color:#7a7568;font-size:10px;margin:1px 0 6px">' + esc(e.via) + '</div>' +
+        '<div style="display:inline-block;font-weight:800;font-size:11.5px;color:#fff;background:' + (e.found ? "#0EA98F" : "#C2410C") + ';padding:2px 9px;border-radius:14px">' +
+        (e.found ? (e.position ? "#" + e.position : "Named") : "Not named") + '</div></div>').join("");
       let comp = "";
       if (v.competitors && v.competitors.length && (!v.found || v.position > 1)) {
-        comp = '<p style="margin:10px 0 4px;font-weight:700;font-size:12.5px">Who AI is naming instead:</p><ol style="margin:0 0 0 18px;padding:0;font-size:12px;color:#3f3a31">' +
+        comp = '<p style="margin:12px 0 4px;font-weight:700;font-size:12.5px;color:#17150F">Who AI is naming instead:</p><ol style="margin:0 0 0 18px;padding:0;font-size:12px;color:#3f3a31">' +
           v.competitors.slice(0, 5).map((c) => '<li style="margin:2px 0"><b>' + esc(c.domain) + '</b> \u2014 ' + esc(c.title) + '</li>').join("") + '</ol>';
       }
       let gemBlk = "";
       const g = v.gemini;
       if (g && g.checked && g.answer) {
         gemBlk =
-          '<div style="margin-top:12px;padding:12px 14px;border:1.5px solid #6D28D9;border-radius:10px;background:#F6F2FC">' +
+          '<div style="margin-top:12px;padding:13px 15px;border:1.5px solid #6D28D9;border-radius:12px;background:#F6F2FC">' +
           '<div style="font-size:12.5px;font-weight:800;color:#6D28D9">What Gemini actually answers \u00b7 ' +
           (g.named ? (g.position ? "names you #" + g.position : "names you") : "doesn\u2019t name you") + ' (live)</div>' +
-          '<p style="margin:5px 0 7px;font-size:12px;color:#3f3a31;font-weight:600">' + esc(g.verdict || "") + '</p>' +
-          '<div style="font-size:11.5px;font-style:italic;color:#5B554B;border-left:3px solid #6D28D9;padding:6px 10px;background:#fff;border-radius:0 8px 8px 0">' + esc(g.answer) + '</div>' +
-          '<div style="font-size:9.5px;color:#7a7568;margin-top:6px">Real Gemini answer with Google Search grounding \u2014 not invented.</div></div>';
+          '<p style="margin:6px 0 8px;font-size:12px;color:#3f3a31;font-weight:600;line-height:1.5">' + esc(g.verdict || "") + '</p>' +
+          '<div style="font-size:11.5px;font-style:italic;color:#5B554B;border-left:3px solid #6D28D9;padding:8px 12px;background:#fff;border-radius:0 8px 8px 0;line-height:1.55">' + esc(g.answer) + '</div>' +
+          '<div style="font-size:9.5px;color:#7a7568;margin-top:7px">Real Gemini answer with Google Search grounding \u2014 not invented.</div></div>';
       }
-      vis =
-        '<div style="margin:16px 0;padding:16px 18px;border:2px solid #17150F;border-radius:12px;background:#FBF9F4">' +
+      B.push('<div style="padding:16px 18px;border:2px solid #17150F;border-radius:14px;background:#FBF9F4">' +
         '<div style="font-size:11px;font-weight:800;letter-spacing:.08em;color:#6D28D9;text-transform:uppercase">AI Search Visibility</div>' +
-        '<p style="margin:6px 0 4px;font-size:13px">Tested live query: <b>\u201c' + esc(v.query) + '\u201d</b></p>' +
-        '<p style="margin:0 0 10px;font-size:12.5px;color:#3f3a31">' + esc(v.verdict) + '</p>' +
-        '<table style="border-collapse:collapse;width:100%"><tr>' + eng + '</tr></table>' + comp + gemBlk + '</div>';
+        '<p style="margin:7px 0 4px;font-size:13px;color:#17150F">Tested live query: <b>\u201c' + esc(v.query) + '\u201d</b></p>' +
+        '<p style="margin:0 0 11px;font-size:12.5px;color:#3f3a31;line-height:1.5">' + esc(v.verdict) + '</p>' +
+        '<div style="display:flex;gap:9px">' + eng + '</div>' + comp + gemBlk + '</div>');
     }
+
+    // Category scores
     const cats = (d.categories || []).map((c) =>
-      '<div style="display:flex;align-items:center;gap:10px;margin:7px 0">' +
-      '<div style="flex:1"><div style="display:flex;justify-content:space-between;font-size:12.5px;font-weight:700"><span>' + c.name + '</span><span style="color:' + hex(c.score) + '">' + c.score + '/100</span></div>' +
-      '<div style="height:8px;background:#EFEAE0;border-radius:6px;overflow:hidden;margin-top:3px"><div style="height:100%;width:' + c.score + '%;background:' + hex(c.score) + '"></div></div></div></div>'
+      '<div style="margin:9px 0"><div style="display:flex;justify-content:space-between;font-size:12.5px;font-weight:700;color:#17150F"><span>' + c.name + '</span><span style="color:' + hex(c.score) + '">' + c.score + '/100</span></div>' +
+      '<div style="height:9px;background:#EFEAE0;border-radius:6px;overflow:hidden;margin-top:4px"><div style="height:100%;width:' + c.score + '%;background:' + hex(c.score) + '"></div></div></div>'
     ).join("");
-    let aiBlk = "";
+    B.push('<div style="padding:16px 18px;border:1px solid #E7E1D5;border-radius:14px;background:#fff">' +
+      '<div style="font-size:11px;font-weight:800;letter-spacing:.08em;color:#6D28D9;text-transform:uppercase;margin-bottom:6px">Category scores</div>' + cats + '</div>');
+
+    // What to fix first
     if (d.ai && (d.ai.priorities || d.ai.meta_description)) {
       const pr = (d.ai.priorities || []).map((p, i) =>
-        '<div style="margin:6px 0;font-size:12px"><b>' + (i + 1) + ". " + esc(p.action) + '</b><br><span style="color:#5B554B">' + esc(p.why) + '</span></div>').join("");
+        '<div style="margin:7px 0;font-size:12px;line-height:1.5"><b style="color:#17150F">' + (i + 1) + ". " + esc(p.action) + '</b><br><span style="color:#5B554B">' + esc(p.why) + '</span></div>').join("");
       const faqs = (d.ai.faqs || []).map((q) => '<li style="margin:2px 0">' + esc(q) + '</li>').join("");
-      aiBlk =
-        '<div style="margin:16px 0;padding:16px 18px;border:1px solid #E7E1D5;border-radius:12px;background:#fff">' +
+      B.push('<div style="padding:16px 18px;border:1px solid #E7E1D5;border-radius:14px;background:#fff">' +
         '<div style="font-size:11px;font-weight:800;letter-spacing:.08em;color:#6D28D9;text-transform:uppercase">What to fix first</div>' + pr +
-        (d.ai.meta_description ? '<p style="margin:10px 0 2px;font-weight:700;font-size:12px">Ready-to-use meta description</p><div style="font-size:11.5px;color:#3f3a31;background:#FBF9F4;border:1px solid #E7E1D5;border-radius:8px;padding:8px">' + esc(d.ai.meta_description) + '</div>' : "") +
-        (faqs ? '<p style="margin:10px 0 2px;font-weight:700;font-size:12px">FAQ questions to answer (for AI/voice)</p><ul style="margin:0 0 0 18px;padding:0;font-size:11.5px;color:#3f3a31">' + faqs + '</ul>' : "") + '</div>';
+        (d.ai.meta_description ? '<p style="margin:11px 0 3px;font-weight:700;font-size:12px;color:#17150F">Ready-to-use meta description</p><div style="font-size:11.5px;color:#3f3a31;background:#FBF9F4;border:1px solid #E7E1D5;border-radius:8px;padding:9px;line-height:1.5">' + esc(d.ai.meta_description) + '</div>' : "") +
+        (faqs ? '<p style="margin:11px 0 3px;font-weight:700;font-size:12px;color:#17150F">FAQ questions to answer (for AI/voice)</p><ul style="margin:0 0 0 18px;padding:0;font-size:11.5px;color:#3f3a31">' + faqs + '</ul>' : "") + '</div>');
     }
-    const checklist = (d.categories || []).map((c) => {
+
+    // Checklist section label (its own small block)
+    B.push('<div style="font-size:11px;font-weight:800;letter-spacing:.08em;color:#6D28D9;text-transform:uppercase;padding-top:2px">Full checklist \u2014 every check explained</div>');
+    // One block per category so rows are never sliced across pages
+    (d.categories || []).forEach((c) => {
       const rows = c.items.map((it) => {
         const m = MARK[it.status] || MARK.info;
-        return '<div style="display:flex;gap:9px;padding:6px 0;border-bottom:1px solid #F0EBE1">' +
-          '<span style="color:' + m[0] + ';font-weight:800;width:14px">' + m[1] + '</span>' +
-          '<div style="font-size:12px"><b>' + esc(it.label) + '</b> <span style="color:#5B554B">\u2014 ' + esc(it.detail || "") + '</span>' +
+        return '<div style="display:flex;gap:9px;padding:7px 0;border-bottom:1px solid #F0EBE1">' +
+          '<span style="color:' + m[0] + ';font-weight:800;width:14px;flex:0 0 14px">' + m[1] + '</span>' +
+          '<div style="font-size:12px;line-height:1.5"><b style="color:#17150F">' + esc(it.label) + '</b> <span style="color:#5B554B">\u2014 ' + esc(it.detail || "") + '</span>' +
           (it.advice ? '<br><i style="color:#7a7568;font-size:11px">' + esc(it.advice) + '</i>' : "") + '</div></div>';
       }).join("");
-      return '<div style="margin-top:12px"><div style="font-weight:800;font-size:13px;border-bottom:2px solid #17150F;padding-bottom:4px">' + c.name + ' <span style="color:' + hex(c.score) + '">' + c.score + '/100</span></div>' + rows + '</div>';
-    }).join("");
+      B.push('<div style="padding:13px 18px;border:1px solid #E7E1D5;border-radius:14px;background:#fff">' +
+        '<div style="font-weight:800;font-size:13px;color:#17150F;border-bottom:2px solid #17150F;padding-bottom:5px;margin-bottom:3px">' + c.name + ' <span style="color:' + hex(c.score) + '">' + c.score + '/100</span></div>' + rows + '</div>');
+    });
 
-    return '<div style="font-family:\'Plus Jakarta Sans\',sans-serif;color:#17150F;width:754px;padding:0">' +
-      '<div style="display:flex;justify-content:space-between;align-items:flex-start;border-bottom:3px solid #17150F;padding-bottom:12px">' +
-        '<div><div style="font-family:\'Fraunces\',serif;font-size:24px;font-weight:700">GEO<span style="color:#6D28D9">wallah</span></div>' +
-        '<div style="font-size:11px;color:#5B554B">AI &amp; SEO Visibility Report</div></div>' +
-        '<div style="text-align:right;font-size:11px;color:#5B554B">' + dt + '<br><b style="color:#17150F">' + esc(d.host || "") + '</b></div></div>' +
-      '<div style="display:flex;gap:18px;align-items:center;margin:16px 0">' +
-        '<div style="flex:0 0 auto;width:96px;height:96px;border-radius:50%;border:8px solid ' + sc + ';display:flex;flex-direction:column;align-items:center;justify-content:center">' +
-        '<div style="font-family:\'Fraunces\',serif;font-size:30px;font-weight:700;line-height:1">' + d.overall_score + '</div><div style="font-size:9px;color:#7a7568">/ 100</div></div>' +
-        '<div style="flex:1"><span style="display:inline-block;background:' + sc + ';color:#fff;font-size:11px;font-weight:800;padding:3px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:.05em">' + esc(d.grade || "") + '</span>' +
-        '<h2 style="font-family:\'Fraunces\',serif;font-size:20px;margin:7px 0 4px">Visibility score for ' + esc(d.host || "your site") + '</h2>' +
-        '<p style="font-size:12.5px;color:#3f3a31;margin:0">' + esc((d.ai && d.ai.verdict) || "How customers and AI engines currently see your business.") + '</p></div></div>' +
-      vis +
-      '<div style="margin:16px 0"><div style="font-size:11px;font-weight:800;letter-spacing:.08em;color:#6D28D9;text-transform:uppercase;margin-bottom:4px">Category scores</div>' + cats + '</div>' +
-      aiBlk +
-      '<div style="margin-top:18px"><div style="font-size:11px;font-weight:800;letter-spacing:.08em;color:#6D28D9;text-transform:uppercase">Full checklist \u2014 every check explained</div>' + checklist + '</div>' +
-      '<div style="margin-top:20px;padding:14px 18px;background:#17150F;color:#fff;border-radius:12px;text-align:center">' +
-        '<div style="font-family:\'Fraunces\',serif;font-size:15px">Want us to fix all of this for you?</div>' +
-        '<div style="font-size:12px;color:#cfc9bd;margin:3px 0 0">Free deeper audit + fixed-price plan \u00b7 WhatsApp +91 70038 88936 \u00b7 geowallah.com \u00b7 rankme@geowallah.com</div></div>' +
-      '<div style="text-align:center;font-size:10px;color:#9a9486;margin-top:8px">\u00a9 ' + new Date().getFullYear() + ' GEOwallah \u00b7 Made in Barrackpore \u00b7 GEO \u00b7 AEO \u00b7 SEO \u00b7 Local</div></div>';
+    // CTA band
+    B.push('<div style="padding:16px 18px;background:#17150F;color:#fff;border-radius:14px;text-align:center">' +
+      '<div style="font-family:\'Fraunces\',serif;font-size:16px">Want us to fix all of this for you?</div>' +
+      '<div style="font-size:12px;color:#cfc9bd;margin:4px 0 0;line-height:1.5">Free deeper audit + fixed-price plan \u00b7 WhatsApp +91 70038 88936<br>geowallah.com \u00b7 rankme@geowallah.com</div></div>');
+
+    return B;
+  }
+
+  function rgb(h) { return [parseInt(h.slice(1, 3), 16), parseInt(h.slice(3, 5), 16), parseInt(h.slice(5, 7), 16)]; }
+
+  function drawChrome(pdf, d, dt) {
+    const pw = 210, ink = rgb("#17150F"), violet = rgb("#6D28D9"), gray = rgb("#5B554B");
+    // Header wordmark
+    pdf.setFont("helvetica", "bold"); pdf.setFontSize(15);
+    pdf.setTextColor(ink[0], ink[1], ink[2]); pdf.text("GEO", 12, 13);
+    const w = pdf.getTextWidth("GEO");
+    pdf.setTextColor(violet[0], violet[1], violet[2]); pdf.text("wallah", 12 + w, 13);
+    pdf.setFont("helvetica", "normal"); pdf.setFontSize(8.5);
+    pdf.setTextColor(gray[0], gray[1], gray[2]); pdf.text("AI & SEO Visibility Report", 12, 17.5);
+    // Right meta
+    pdf.setFontSize(8.5); pdf.setTextColor(gray[0], gray[1], gray[2]);
+    pdf.text(dt, pw - 12, 12, { align: "right" });
+    pdf.setFont("helvetica", "bold"); pdf.setTextColor(ink[0], ink[1], ink[2]);
+    pdf.text(d.host || "", pw - 12, 16.5, { align: "right" });
+    // Header rule
+    pdf.setDrawColor(ink[0], ink[1], ink[2]); pdf.setLineWidth(0.6); pdf.line(12, 20, pw - 12, 20);
+    // Footer
+    pdf.setDrawColor(231, 225, 213); pdf.setLineWidth(0.3); pdf.line(12, 286, pw - 12, 286);
+    pdf.setFont("helvetica", "normal"); pdf.setFontSize(8);
+    pdf.setTextColor(154, 148, 134, 1);
+    pdf.text("\u00a9 " + new Date().getFullYear() + " GEOwallah \u00b7 Made in Barrackpore", 12, 291);
   }
 
   async function generatePdf(btn) {
@@ -383,22 +415,49 @@
     }
     const old = btn.innerHTML;
     btn.disabled = true; btn.textContent = "Preparing PDF…";
+    const d = lastData;
+    const dt = new Date().toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
+    const CW = 744; // render width in px (maps to content width below)
     const holder = document.createElement("div");
-    holder.style.cssText = "position:fixed;left:-10000px;top:0;width:794px;background:#fff;padding:20px;box-sizing:border-box";
-    holder.innerHTML = buildReportHTML(lastData);
+    holder.style.cssText = "position:fixed;left:-10000px;top:0;width:" + CW + "px;background:#fff;font-family:'Plus Jakarta Sans',sans-serif";
+    holder.innerHTML = buildReportBlocks(d).map((h) => '<div class="pb" style="margin:0 0 10px">' + h + '</div>').join("");
     document.body.appendChild(holder);
     try {
-      const canvas = await html2canvas(holder, { scale: 2, backgroundColor: "#ffffff", useCORS: true });
-      const img = canvas.toDataURL("image/jpeg", 0.92);
       const { jsPDF } = window.jspdf;
       const pdf = new jsPDF("p", "mm", "a4");
-      const pw = 210, ph = 297;
-      const imgH = canvas.height * pw / canvas.width;
-      let left = imgH, pos = 0;
-      pdf.addImage(img, "JPEG", 0, pos, pw, imgH);
-      left -= ph;
-      while (left > 0) { pos -= ph; pdf.addPage(); pdf.addImage(img, "JPEG", 0, pos, pw, imgH); left -= ph; }
-      const host = (lastData.host || "site").replace(/[^a-z0-9.-]/gi, "");
+      const pw = 210, contentW = pw - 24; // 12mm margins
+      const px2mm = contentW / CW;        // px -> mm scale
+      const top = 25, bottom = 283, gap = 3.2;
+      let y = top, page = 1;
+      drawChrome(pdf, d, dt);
+      const blocks = Array.from(holder.querySelectorAll(".pb"));
+      for (const el of blocks) {
+        const canvas = await html2canvas(el, { scale: 2, backgroundColor: null, useCORS: true });
+        const hmm = canvas.height * px2mm * (CW / canvas.width); // robust to scale
+        const img = canvas.toDataURL("image/jpeg", 0.95);
+        if (hmm <= bottom - top) {
+          if (y + hmm > bottom) { pdf.addPage(); page++; drawChrome(pdf, d, dt); y = top; }
+          pdf.addImage(img, "JPEG", 12, y, contentW, hmm);
+          y += hmm + gap;
+        } else {
+          // taller than a full page (rare) — slice just this block safely
+          let remaining = hmm, srcY = 0;
+          const pageCap = bottom - top;
+          while (remaining > 0) {
+            if (y > top) { pdf.addPage(); page++; drawChrome(pdf, d, dt); y = top; }
+            const sliceMM = Math.min(pageCap, remaining);
+            const sliceCanvas = document.createElement("canvas");
+            sliceCanvas.width = canvas.width;
+            sliceCanvas.height = Math.round(sliceMM / px2mm / (CW / canvas.width));
+            const ctx = sliceCanvas.getContext("2d");
+            ctx.drawImage(canvas, 0, srcY, canvas.width, sliceCanvas.height, 0, 0, canvas.width, sliceCanvas.height);
+            pdf.addImage(sliceCanvas.toDataURL("image/jpeg", 0.95), "JPEG", 12, y, contentW, sliceMM);
+            srcY += sliceCanvas.height; remaining -= sliceMM; y = bottom + 1;
+          }
+          y = top; pdf.addPage(); page++; drawChrome(pdf, d, dt);
+        }
+      }
+      const host = (d.host || "site").replace(/[^a-z0-9.-]/gi, "");
       pdf.save("GEOwallah-Audit-" + host + ".pdf");
     } catch (err) {
       alert("Sorry — couldn't generate the PDF. Please try again.");

@@ -404,4 +404,65 @@ h3{font-size:1.4rem;letter-spacing:-.01em}
 @media(prefers-reduced-motion:reduce){
   *{animation:none!important;transition:none!important}
   [data-reveal]{opacity:1;transform:none}
+  .ambient,.doodle,.cursor-dot{display:none!important}
 }
+
+/* ============================================================
+   v2 polish — ambient depth, floating accents, micro-motion
+   (all decorative, layered behind content, reduced-motion safe)
+   ============================================================ */
+
+/* subtle dotted paper texture that scrolls with the page */
+body{
+  background:
+    radial-gradient(rgba(23,21,15,.045) 1px,transparent 1px) 0 0/24px 24px,
+    var(--paper);
+}
+
+/* ---- ambient gradient orbs (fixed, slow drift, behind all content) ---- */
+.ambient{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
+.orb{position:absolute;border-radius:50%;filter:blur(64px);opacity:.34;will-change:transform}
+.orb.o1{width:44vw;height:44vw;background:radial-gradient(circle,#5eead4,transparent 68%);top:-12vw;left:-9vw;animation:orbFloat1 24s ease-in-out infinite}
+.orb.o2{width:38vw;height:38vw;background:radial-gradient(circle,#c4b5fd,transparent 68%);top:38vh;right:-11vw;animation:orbFloat2 30s ease-in-out infinite}
+.orb.o3{width:32vw;height:32vw;background:radial-gradient(circle,#fcd96b,transparent 68%);bottom:-10vw;left:34vw;animation:orbFloat3 34s ease-in-out infinite}
+@keyframes orbFloat1{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(5vw,4vh) scale(1.08)}}
+@keyframes orbFloat2{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-4vw,5vh) scale(1.1)}}
+@keyframes orbFloat3{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(3vw,-5vh) scale(1.06)}}
+
+/* ---- floating hand-drawn doodles ---- */
+.doodle{position:absolute;z-index:2;pointer-events:none;opacity:.9}
+.doodle svg{display:block;width:100%;height:100%;overflow:visible}
+.doodle path,.doodle circle,.doodle line,.doodle polyline{fill:none;stroke-linecap:round;stroke-linejoin:round}
+.doodle.float{animation:bob 6s ease-in-out infinite}
+.doodle.float.alt{animation-duration:7.5s;animation-delay:-2s}
+.doodle.spin{animation:spinSlow 22s linear infinite}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(var(--rot,0deg))}50%{transform:translateY(-12px) rotate(var(--rot,0deg))}}
+@keyframes spinSlow{to{transform:rotate(360deg)}}
+
+/* ---- icons: gentle continuous float + reveal pop ---- */
+.block .ico,.srow .sgrid .ico,.contact-info .ci-ico{will-change:transform}
+[data-reveal] .ico{transition:transform .5s var(--ease),box-shadow .18s var(--ease)}
+.float-ico{animation:icoFloat 5.5s ease-in-out infinite}
+@keyframes icoFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+.block:hover .ico{transform:translateY(-7px) rotate(-6deg) scale(1.06)}
+
+/* ---- highlighter mark sweeps in when scrolled into view ---- */
+.has-sweep .mark:not(.rotor)::after{clip-path:inset(0 100% 0 0);transition:clip-path .55s var(--ease) .12s}
+.has-sweep .mark:not(.rotor).lit::after{clip-path:inset(0 0 0 0)}
+
+/* ---- magnetic buttons (JS sets --mx/--my) ---- */
+.btn{will-change:transform}
+.magnetic{transform:translate(var(--mx,0),var(--my,0))}
+
+/* ---- custom cursor (desktop, fine pointer only) ---- */
+.cursor-dot{position:fixed;top:0;left:0;width:9px;height:9px;border-radius:50%;
+  background:var(--violet);z-index:120;pointer-events:none;
+  transform:translate(-50%,-50%);transition:width .18s var(--ease),height .18s var(--ease),background .18s,opacity .2s;mix-blend-mode:multiply}
+.cursor-ring{position:fixed;top:0;left:0;width:34px;height:34px;border-radius:50%;
+  border:2px solid rgba(109,40,217,.45);z-index:119;pointer-events:none;transform:translate(-50%,-50%)}
+.cursor-dot.hot{width:16px;height:16px;background:var(--teal-bright)}
+@media(hover:none),(pointer:coarse){.cursor-dot,.cursor-ring{display:none}}
+
+/* collage floats softly on its own */
+.collage{animation:collageFloat 9s ease-in-out infinite}
+@keyframes collageFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}

@@ -131,4 +131,114 @@
       card.addEventListener('mouseleave', function () { card.style.transform = base; });
     });
   }
+
+  /* ===== v2 polish: ambient depth, doodles, magnetic btns, cursor, mark sweep ===== */
+  function mk(tag, cls, html) {
+    var e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (html != null) e.innerHTML = html;
+    return e;
+  }
+
+  if (!reduce) {
+    /* ambient gradient orbs behind everything */
+    var amb = mk('div', 'ambient');
+    amb.setAttribute('aria-hidden', 'true');
+    amb.innerHTML = '<span class="orb o1"></span><span class="orb o2"></span><span class="orb o3"></span>';
+    document.body.appendChild(amb);
+
+    /* floating hand-drawn doodles in the hero */
+    var hero = $('.hero');
+    if (hero) {
+      var sparkle = '<svg viewBox="0 0 40 40" stroke="#6D28D9" stroke-width="2.4"><path d="M20 5l2.6 11.4L34 19l-11.4 2.6L20 33l-2.6-11.4L6 19l11.4-2.6z"/></svg>';
+      var squiggle = '<svg viewBox="0 0 80 30" stroke="#14B8A6" stroke-width="3"><path d="M3 18c8-16 18 12 26-2s18 12 26-2"/></svg>';
+      var ring = '<svg viewBox="0 0 50 50" stroke="#F59E0B" stroke-width="3"><circle cx="25" cy="25" r="20" stroke-dasharray="5 9"/></svg>';
+      var arrow = '<svg viewBox="0 0 70 52" stroke="#F97362" stroke-width="3"><path d="M5 12c22 4 40 14 54 32M59 44l5-13M59 44l-13 3"/></svg>';
+      var doods = [
+        { h: sparkle, s: 'doodle float', css: 'top:3%;right:5%;width:40px;height:40px;--rot:8deg' },
+        { h: ring, s: 'doodle spin', css: 'top:44%;left:-16px;width:48px;height:48px' },
+        { h: squiggle, s: 'doodle float alt', css: 'bottom:10%;right:12%;width:76px;height:30px' },
+        { h: arrow, s: 'doodle float', css: 'bottom:1%;left:4%;width:68px;height:50px;--rot:-4deg' }
+      ];
+      doods.forEach(function (d) {
+        var n = mk('span', d.s, d.h);
+        n.style.cssText = d.css;
+        n.setAttribute('aria-hidden', 'true');
+        hero.appendChild(n);
+      });
+    }
+
+    /* gentle continuous float on icons (staggered) */
+    $$('.block .ico, .ci-ico, .step .ico, .sgrid .ico').forEach(function (ic, idx) {
+      ic.classList.add('float-ico');
+      ic.style.animationDelay = ((idx % 5) * -0.7) + 's';
+    });
+
+    /* magnetic buttons */
+    $$('.btn-primary, .btn-amber, .btn-wa').forEach(function (b) {
+      b.classList.add('magnetic');
+      b.addEventListener('mousemove', function (e) {
+        var r = b.getBoundingClientRect();
+        b.style.setProperty('--mx', (((e.clientX - r.left) / r.width - 0.5) * 10).toFixed(1) + 'px');
+        b.style.setProperty('--my', (((e.clientY - r.top) / r.height - 0.5) * 10).toFixed(1) + 'px');
+      });
+      b.addEventListener('mouseleave', function () {
+        b.style.setProperty('--mx', '0px');
+        b.style.setProperty('--my', '0px');
+      });
+    });
+
+    /* highlighter marks sweep in on scroll */
+    var marks = $$('.mark:not(.rotor)');
+    if (marks.length && 'IntersectionObserver' in window) {
+      document.documentElement.classList.add('has-sweep');
+      var mo = new IntersectionObserver(function (ents) {
+        ents.forEach(function (en) {
+          if (en.isIntersecting) { en.target.classList.add('lit'); mo.unobserve(en.target); }
+        });
+      }, { threshold: 0.55 });
+      marks.forEach(function (m) { mo.observe(m); });
+    } else {
+      marks.forEach(function (m) { m.classList.add('lit'); });
+    }
+
+    /* scroll parallax for doodles */
+    var paraDoodles = $$('.doodle');
+    var ticking = false;
+    function parallax() {
+      var y = window.pageYOffset;
+      paraDoodles.forEach(function (d, i) {
+        d.style.marginTop = (y * (i % 2 ? 0.06 : -0.05)).toFixed(1) + 'px';
+      });
+      ticking = false;
+    }
+    if (paraDoodles.length) {
+      window.addEventListener('scroll', function () {
+        if (!ticking) { requestAnimationFrame(parallax); ticking = true; }
+      }, { passive: true });
+    }
+
+    /* custom cursor (desktop, fine pointer only) */
+    if (window.matchMedia('(hover:hover) and (pointer:fine)').matches) {
+      var dot = mk('div', 'cursor-dot'), rng = mk('div', 'cursor-ring');
+      document.body.appendChild(dot);
+      document.body.appendChild(rng);
+      var cx = 0, cy = 0, rx = 0, ry = 0;
+      window.addEventListener('mousemove', function (e) {
+        cx = e.clientX; cy = e.clientY;
+        dot.style.left = cx + 'px'; dot.style.top = cy + 'px';
+      });
+      (function ringLoop() {
+        rx += (cx - rx) * 0.18; ry += (cy - ry) * 0.18;
+        rng.style.left = rx + 'px'; rng.style.top = ry + 'px';
+        requestAnimationFrame(ringLoop);
+      })();
+      document.addEventListener('mouseover', function (e) {
+        if (e.target.closest && e.target.closest('a,button,.btn,.ccard,.block,.plan')) dot.classList.add('hot');
+      });
+      document.addEventListener('mouseout', function (e) {
+        if (e.target.closest && e.target.closest('a,button,.btn,.ccard,.block,.plan')) dot.classList.remove('hot');
+      });
+    }
+  }
 })();

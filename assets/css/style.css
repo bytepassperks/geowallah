@@ -154,8 +154,8 @@ h3{font-size:1.4rem;letter-spacing:-.01em}
 /* ---------- marquee ---------- */
 .marquee{border-top:2px solid var(--ink);border-bottom:2px solid var(--ink);background:var(--ink);color:var(--paper);
   overflow:hidden;padding:14px 0}
-.marquee .track{display:flex;gap:42px;white-space:nowrap;width:max-content;animation:slide 26s linear infinite;font-family:var(--font-d);font-size:1.15rem;font-style:italic}
-.marquee .track span{display:inline-flex;align-items:center;gap:42px}
+.marquee .track{display:flex;gap:0;white-space:nowrap;width:max-content;animation:slide 48s linear infinite;font-family:var(--font-d);font-size:1.15rem;font-style:italic}
+.marquee .track span{display:inline-flex;align-items:center;gap:42px;padding-right:42px}
 .marquee .track span::after{content:"✦";color:var(--amber);font-style:normal}
 .marquee:hover .track{animation-play-state:paused}
 @keyframes slide{to{transform:translateX(-50%)}}

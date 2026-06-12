@@ -801,6 +801,8 @@
   if (fixForm) fixForm.addEventListener("submit", async function (e) {
     e.preventDefault();
     var email = (document.getElementById("fixEmail").value || "").trim();
+    var optinEl = document.getElementById("fixOptin");
+    var optIn = optinEl ? !!optinEl.checked : false;
     var hint = document.getElementById("fixHint");
     var out = document.getElementById("fixOut");
     var btn = document.getElementById("fixGo");
@@ -816,6 +818,7 @@
         body: JSON.stringify({
           url: ctx.url, business_name: ctx.business_name,
           city: ctx.city, category: ctx.category, email: email,
+          opt_in: optIn,
         }),
       });
       var d = await r.json();

@@ -628,6 +628,26 @@ body{
 .ard-t em{display:block;color:var(--ink);font-size:.88rem;font-style:normal;margin-top:5px;
   padding:8px 12px;background:var(--paper-2);border-radius:9px;border-left:3px solid var(--amber)}
 .ar-band{margin-top:40px}
+/* §9 fix-plan email capture (on the CTA band) */
+.fix-form{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;max-width:520px;margin:0 auto}
+.fix-form input{flex:1;min-width:220px;padding:14px 16px;border:2px solid var(--ink);border-radius:11px;
+  font-family:var(--font-b);font-size:.96rem;background:#fff;color:var(--ink)}
+.cta-band .fix-hint{color:#e9e2ff;font-size:.86rem;margin:12px 0 0;opacity:.9}
+.fix-out{margin:18px auto 0;max-width:640px;text-align:left;background:#fff;color:var(--ink);
+  border:2px solid var(--ink);border-radius:16px;padding:22px 24px;box-shadow:var(--shadow)}
+.fix-out h3{color:var(--ink);margin:0 0 4px;font-size:1.15rem}
+.fix-out .fp-score{font-weight:800;color:var(--violet)}
+.fix-out ol{margin:12px 0 0;padding-left:20px}
+.fix-out ol li{margin:8px 0;font-size:.92rem}
+.fix-out ol li small{display:block;color:var(--ink-2);font-weight:400;margin-top:2px}
+.fix-out .fp-quote{margin-top:16px;border-top:1px dashed #ddd;padding-top:14px}
+.fix-out .fp-row{display:flex;justify-content:space-between;gap:12px;padding:6px 0;border-bottom:1px solid #f0f0f0;font-size:.92rem}
+.fix-out .fp-row b{white-space:nowrap}
+.fix-out .fp-total{display:flex;justify-content:space-between;font-weight:800;font-size:1.05rem;margin-top:8px}
+.fix-out .fp-bundle{color:#16a34a;font-weight:700;margin-top:8px;font-size:.92rem}
+.svc-brief{margin:10px 0 0}
+.svc-brief a{font-weight:700;font-size:.9rem;color:var(--violet);border-bottom:2px solid var(--amber);padding-bottom:1px}
+.svc-brief a:hover{color:var(--ink)}
 
 @media(max-width:720px){
   .ar-cats{grid-template-columns:1fr}

@@ -14,7 +14,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css?v=20260611f">
+<link rel="stylesheet" href="assets/css/style.css?v=20260612a">
 </head>
 <body>
 <div class="progress"></div>
@@ -183,14 +183,19 @@
 
     <div class="ar-detail" id="arDetail"></div>
 
-    <div class="cta-band ar-band" data-reveal>
+    <div class="cta-band ar-band" id="fixBand" data-reveal>
       <h2>Want us to fix all of this <span class="mark">for you</span>?</h2>
-      <p class="lead">Get a free, deeper audit + a prioritised action plan and fixed-price quote. We'll get you found on Google, cited by AI and chosen locally.</p>
-      <div class="cta-actions">
-        <a class="btn btn-primary" href="contact.html">Get my free plan</a>
+      <p class="lead">Get a free, deeper audit + a prioritised action plan and fixed-price quote — emailed to you instantly as a branded PDF. We'll get you found on Google, cited by AI and chosen locally.</p>
+      <form class="fix-form" id="fixForm" novalidate>
+        <input type="email" id="fixEmail" placeholder="you@yourbusiness.com" autocomplete="email" required>
+        <button class="btn btn-primary" type="submit" id="fixGo">Email me my action plan</button>
+      </form>
+      <p class="fix-hint" id="fixHint">Free · no signup · arrives in under a minute.</p>
+      <div class="fix-out" id="fixOut" hidden></div>
+      <div class="cta-actions" style="margin-top:14px">
         <a class="btn btn-wa" href="https://wa.me/917003888936" target="_blank" rel="noopener">
           <svg viewBox="0 0 24 24" fill="#06351b"><path d="M12 2a10 10 0 0 0-8.6 15l-1.4 5 5.1-1.3A10 10 0 1 0 12 2Z"/></svg>
-          Chat on WhatsApp</a>
+          Or chat on WhatsApp</a>
       </div>
     </div>
   </div>
@@ -225,6 +230,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="assets/js/main.js"></script>
-<script src="assets/js/audit.js?v=20260611k"></script>
+<script src="assets/js/audit.js?v=20260612a"></script>
 </body>
 </html>

@@ -770,6 +770,75 @@
     if (e.target.id === "cmpGo") doCompare(document.getElementById("cmpUrl").value, false);
   });
 
+  // ---------- §9: "fix all of this for me" — deeper plan + quote, emailed ----------
+  function inrFmt(n) {
+    n = String(n);
+    if (n.length <= 3) return n;
+    var last3 = n.slice(-3), rest = n.slice(0, -3), parts = [];
+    while (rest.length > 2) { parts.unshift(rest.slice(-2)); rest = rest.slice(0, -2); }
+    if (rest) parts.unshift(rest);
+    return parts.join(",") + "," + last3;
+  }
+  var fixForm = document.getElementById("fixForm");
+  if (fixForm) fixForm.addEventListener("submit", async function (e) {
+    e.preventDefault();
+    var email = (document.getElementById("fixEmail").value || "").trim();
+    var hint = document.getElementById("fixHint");
+    var out = document.getElementById("fixOut");
+    var btn = document.getElementById("fixGo");
+    if (!email || email.indexOf("@") < 0) { hint.textContent = "Please enter a valid email."; return; }
+    var ctx = bizCtx();
+    if (!ctx.url) { hint.textContent = "Run your audit above first, then we'll build your plan."; return; }
+    var old = btn.textContent; btn.disabled = true; btn.textContent = "Building your plan…";
+    hint.textContent = "Running a deeper audit and building your action plan — this can take up to a minute.";
+    out.hidden = true;
+    try {
+      var r = await fetch(API + "/fixplan", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          url: ctx.url, business_name: ctx.business_name,
+          city: ctx.city, category: ctx.category, email: email,
+        }),
+      });
+      var d = await r.json();
+      if (!d.ok) { hint.textContent = d.error || "Couldn't build that right now — please retry."; }
+      else { renderFixPlan(d, email); hint.textContent = ""; }
+    } catch (err) { hint.textContent = "Network error — please retry."; }
+    finally { btn.disabled = false; btn.textContent = old; }
+  });
+
+  function renderFixPlan(d, email) {
+    var out = document.getElementById("fixOut");
+    var steps = (d.plan || []).slice(0, 8).map(function (s) {
+      return "<li>" + esc(s.action) + (s.why ? "<small>" + esc(s.why) + "</small>" : "") + "</li>";
+    }).join("");
+    var q = d.quote || { items: [], total: 0 };
+    var rows = (q.items || []).map(function (i) {
+      return '<div class="fp-row"><span>' + esc(i.name) +
+        '<br><small style="color:#777">' + esc(i.why || "") + "</small></span>" +
+        "<b>₹" + inrFmt(i.price) + "</b></div>";
+    }).join("");
+    var bundle = q.bundle ? '<div class="fp-bundle">Bundle as a monthly plan: ₹' +
+      inrFmt(q.bundle) + "/mo (save 15%)</div>" : "";
+    var sent = d.emailed
+      ? "We've emailed your full plan + branded PDF to <b>" + esc(email) + "</b>."
+      : "Here's your plan below (email delivery is being set up).";
+    out.innerHTML =
+      "<h3>Your action plan is ready</h3>" +
+      "<p>" + sent + " Current score: <span class='fp-score'>" + (d.score == null ? "—" : d.score) +
+      "/100</span> (" + esc(d.grade || "") + ").</p>" +
+      "<ol>" + steps + "</ol>" +
+      '<div class="fp-quote"><b>Fixed-price quote</b>' + rows +
+      '<div class="fp-total"><span>Total</span><span>₹' + inrFmt(q.total) + "</span></div>" +
+      bundle + "</div>" +
+      '<div style="text-align:center;margin-top:18px">' +
+      '<a class="btn btn-wa" href="https://wa.me/917003888936?text=' +
+      encodeURIComponent("Hi GEOwallah, I got my action plan for " + (d.host || "") + " and want to proceed") +
+      '" target="_blank" rel="noopener">Proceed on WhatsApp</a></div>';
+    out.hidden = false;
+    out.scrollIntoView({ behavior: "smooth", block: "center" });
+  }
+
   // prefill from ?url=
   const q = new URLSearchParams(location.search).get("url");
   if (q) {

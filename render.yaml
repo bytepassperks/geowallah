@@ -31,9 +31,15 @@ services:
       - path: /llms.txt
         name: Content-Type
         value: text/plain; charset=utf-8
+      - path: /llms.txt
+        name: Cache-Control
+        value: public, max-age=86400
       - path: /llms-full.txt
         name: Content-Type
         value: text/plain; charset=utf-8
+      - path: /llms-full.txt
+        name: Cache-Control
+        value: public, max-age=86400
       - path: /robots.txt
         name: Cache-Control
         value: public, max-age=86400

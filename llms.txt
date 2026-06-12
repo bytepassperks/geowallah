@@ -15,5 +15,8 @@ GEOwallah's core promise: leads over vanity metrics, presence everywhere custome
 ## Topics & expertise
 - [Blog — AI Search, GEO & Local SEO insights](https://geowallah.com/blog.html): Practical guides on GEO, AI SEO, local SEO and getting cited by ChatGPT, Gemini and Google AI Overviews.
 
+## Full reference
+- [llms-full.txt — expanded reference](https://geowallah.com/llms-full.txt): The complete, quotable site reference for AI/LLM crawlers (services, pricing, FAQs, expertise).
+
 ## Optional
 - Service area: Barrackpore and all of India (remote). Local focus: North 24 Parganas, Kolkata metro.

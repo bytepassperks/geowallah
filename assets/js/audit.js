@@ -1,7 +1,7 @@
 /* GEOwallah — free audit tool client */
 (function () {
   "use strict";
-  const API = "https://geowallah-audit-prod.osc-fr1.scalingo.io";
+  const API = "https://api.geowallah.com";
 
   const form = document.getElementById("auditForm");
   if (!form) return;
@@ -186,6 +186,7 @@
       detail.appendChild(sec);
     });
 
+    setupTools(d);
     results.scrollIntoView({ behavior: "smooth" });
   }
 
@@ -654,6 +655,100 @@
   document.addEventListener("click", function (e) {
     const b = e.target && e.target.closest && e.target.closest("#arPdf");
     if (b) generatePdf(b);
+  });
+
+  // ---------- free tools: fix-it generators, competitor compare, embed badge ----------
+  function bizCtx() {
+    return {
+      url: (lastData && lastData.host) ? "https://" + lastData.host
+                                       : document.getElementById("afUrl").value.trim(),
+      business_name: document.getElementById("afName").value.trim(),
+      city: document.getElementById("afCity").value.trim(),
+      category: document.getElementById("afCat").value.trim(),
+    };
+  }
+
+  function setupTools(d) {
+    const fo = document.getElementById("fxOut"); if (fo) fo.hidden = true;
+    const co = document.getElementById("cmpOut"); if (co) { co.hidden = true; co.innerHTML = ""; }
+    const wg = document.getElementById("wgCode");
+    if (wg) wg.textContent = '<script src="' + API + '/widget.js" data-url="' +
+      (d.host || "yoursite.com") + '"></scr' + 'ipt>';
+  }
+
+  // fix-it generators + copy buttons
+  document.addEventListener("click", async function (e) {
+    const fb = e.target.closest && e.target.closest("[data-fix]");
+    if (fb) {
+      const kind = fb.getAttribute("data-fix");
+      const out = document.getElementById("fxOut");
+      const code = document.getElementById("fxCode");
+      const old = fb.textContent;
+      fb.disabled = true; fb.textContent = "Generating…";
+      out.hidden = false; code.textContent = "Working…";
+      try {
+        const ctx = bizCtx(); ctx.kind = kind;
+        const r = await fetch(API + "/generate", {
+          method: "POST", headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(ctx),
+        });
+        const data = await r.json();
+        code.textContent = data.ok ? data.content : (data.error || "Couldn't generate that right now — please retry.");
+      } catch (err) { code.textContent = "Network error — please retry."; }
+      finally { fb.disabled = false; fb.textContent = old; }
+      return;
+    }
+    if (e.target.id === "fxCopy" || e.target.id === "wgCopy") {
+      const id = e.target.id === "fxCopy" ? "fxCode" : "wgCode";
+      navigator.clipboard.writeText(document.getElementById(id).textContent).then(() => {
+        const t = e.target.textContent; e.target.textContent = "Copied!";
+        setTimeout(() => (e.target.textContent = t), 1600);
+      });
+    }
+  });
+
+  // competitor compare
+  function cmpCard(name, score, grade, isYou) {
+    const col = typeof score === "number" ? hex(score) : "#9b958a";
+    return '<div class="cmp-card' + (isYou ? " you" : "") + '">' +
+      '<div class="cmp-name">' + (isYou ? "You · " : "") + esc(name) + '</div>' +
+      '<div class="cmp-score" style="color:' + col + '">' + score + '</div>' +
+      '<div class="cmp-grade">' + esc(grade || "") + '</div></div>';
+  }
+  function cmpVerdict(you, them) {
+    if (typeof you !== "number" || typeof them !== "number")
+      return "Run your own audit above first to compare side by side.";
+    if (you > them) return "You're ahead by " + (you - them) + " points — keep the lead with consistent GEO/AEO work.";
+    if (you < them) return "They're ahead by " + (them - you) + " points. We can close that gap — that's exactly what GEOwallah does.";
+    return "Neck and neck — small AI-visibility wins will tip it your way.";
+  }
+  document.addEventListener("click", async function (e) {
+    if (e.target.id !== "cmpGo") return;
+    const cu = document.getElementById("cmpUrl").value.trim();
+    const out = document.getElementById("cmpOut");
+    if (!cu) return;
+    const old = e.target.textContent;
+    e.target.disabled = true; e.target.textContent = "Comparing…";
+    out.hidden = false; out.innerHTML = '<p class="lead">Auditing ' + esc(cu) + '… this takes a few seconds.</p>';
+    try {
+      const ctx = bizCtx();
+      const r = await fetch(API + "/compare", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ competitor_url: cu, city: ctx.city, category: ctx.category }),
+      });
+      const data = await r.json();
+      if (!data.ok) {
+        out.innerHTML = '<p class="lead">We couldn\'t audit that site (it may block automated visits). ' + esc(data.block_reason || "") + '</p>';
+      } else {
+        const you = (lastData && lastData.overall_score != null) ? lastData.overall_score : "—";
+        const them = (data.score != null) ? data.score : "—";
+        out.innerHTML = '<div class="cmp-cards">' +
+          cmpCard((lastData && lastData.host) || "You", you, lastData && lastData.grade, true) +
+          cmpCard(data.host || cu, them, data.grade, false) + '</div>' +
+          '<p class="ai-note">' + cmpVerdict(you, them) + '</p>';
+      }
+    } catch (err) { out.innerHTML = '<p class="lead">Network error — please retry.</p>'; }
+    finally { e.target.disabled = false; e.target.textContent = old; }
   });
 
   // prefill from ?url=

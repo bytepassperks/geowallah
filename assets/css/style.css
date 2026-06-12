@@ -589,6 +589,25 @@ body{
 .ar-faqs li::before{content:"Q  ";font-family:var(--font-d);font-style:italic;color:var(--violet)}
 .ai-note{margin-top:20px;font-size:.82rem;color:var(--ink-3);border-top:1px solid var(--hair);padding-top:14px}
 
+/* ---- free tools: fix-it, compare, embed badge ---- */
+.ar-tools{margin-top:18px;padding:28px 30px}
+.ar-tools h3{font-size:clamp(1.2rem,2.2vw,1.7rem);margin:10px 0 6px}
+.ar-tools .lead{margin-bottom:16px}
+.fx-btns{display:flex;flex-wrap:wrap;gap:10px}
+.fx-out{margin-top:16px}
+.copybox pre{flex:1;margin:0;white-space:pre-wrap;word-break:break-word;max-height:340px;overflow:auto}
+.copybox pre code{font-family:var(--font-s);font-size:.86rem;color:var(--ink-2);line-height:1.55}
+.cmp-form{display:flex;gap:10px;flex-wrap:wrap}
+.cmp-form input{flex:1;min-width:200px;padding:13px 15px;border:2px solid var(--ink);border-radius:11px;
+  font-family:var(--font-b);font-size:.95rem;background:var(--paper)}
+.cmp-out{margin-top:18px}
+.cmp-cards{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.cmp-card{padding:18px;border:2px solid var(--hair);border-radius:14px;background:var(--paper);text-align:center}
+.cmp-card.you{border-color:var(--violet)}
+.cmp-name{font-weight:700;font-size:.9rem;color:var(--ink-2);word-break:break-word}
+.cmp-score{font-family:var(--font-d);font-weight:700;font-size:2.6rem;line-height:1.1;margin:6px 0}
+.cmp-grade{font-size:.82rem;color:var(--ink-3)}
+
 .ar-detail{margin-top:36px}
 .ard-cat{padding:26px;margin-bottom:18px}
 .ard-cat h3{display:flex;align-items:center;gap:10px;margin-bottom:16px;font-size:1.3rem}

@@ -14,7 +14,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css?v=20260611d">
+<link rel="stylesheet" href="assets/css/style.css?v=20260611e">
 </head>
 <body>
 <div class="progress"></div>
@@ -145,6 +145,42 @@
       <p class="ai-note">On-page AI analysis by GEOwallah, powered by Cloudflare Workers AI — it reasons about your actual page content, not invented claims.</p>
     </div>
 
+    <!-- FIX-IT GENERATORS -->
+    <div class="ar-tools block" id="arFixit">
+      <span class="kicker"><span class="num">✦</span><span class="dash"></span> One-click fixes</span>
+      <h3>Generate your fixes — free</h3>
+      <p class="lead">Instantly create ready-to-paste code for the gaps above. Copy it into your site, or let us install it for you.</p>
+      <div class="fx-btns">
+        <button class="btn btn-ghost btn-sm" type="button" data-fix="schema">LocalBusiness schema</button>
+        <button class="btn btn-ghost btn-sm" type="button" data-fix="faq">FAQ (AEO)</button>
+        <button class="btn btn-ghost btn-sm" type="button" data-fix="meta">Meta description</button>
+        <button class="btn btn-ghost btn-sm" type="button" data-fix="sitemap">sitemap.xml</button>
+      </div>
+      <div class="fx-out" id="fxOut" hidden>
+        <div class="copybox"><pre><code id="fxCode"></code></pre><button class="btn btn-sm btn-ghost" type="button" id="fxCopy">Copy</button></div>
+      </div>
+    </div>
+
+    <!-- COMPETITOR COMPARE -->
+    <div class="ar-tools block" id="arCompare">
+      <span class="kicker"><span class="num">VS</span><span class="dash"></span> Competitor check</span>
+      <h3>How do you compare to a rival?</h3>
+      <p class="lead">Enter a competitor's website to see their visibility score next to yours.</p>
+      <div class="cmp-form">
+        <input type="text" id="cmpUrl" placeholder="competitor.com">
+        <button class="btn btn-primary btn-sm" type="button" id="cmpGo">Compare</button>
+      </div>
+      <div class="cmp-out" id="cmpOut" hidden></div>
+    </div>
+
+    <!-- EMBEDDABLE BADGE -->
+    <div class="ar-tools block" id="arWidget">
+      <span class="kicker"><span class="num">&lt;/&gt;</span><span class="dash"></span> Show off your score</span>
+      <h3>Add a live score badge to your site</h3>
+      <p class="lead">Paste this snippet where you want your live GEOwallah AI-visibility badge to appear. It updates automatically.</p>
+      <div class="copybox"><pre><code id="wgCode"></code></pre><button class="btn btn-sm btn-ghost" type="button" id="wgCopy">Copy</button></div>
+    </div>
+
     <div class="ar-detail" id="arDetail"></div>
 
     <div class="cta-band ar-band" data-reveal>
@@ -189,6 +225,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="assets/js/main.js"></script>
-<script src="assets/js/audit.js?v=20260611i"></script>
+<script src="assets/js/audit.js?v=20260611j"></script>
 </body>
 </html>

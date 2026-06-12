@@ -674,6 +674,14 @@
     const wg = document.getElementById("wgCode");
     if (wg) wg.textContent = '<script src="' + API + '/widget.js" data-url="' +
       (d.host || "yoursite.com") + '"></scr' + 'ipt>';
+
+    // Auto-benchmark the real rival AI names for this business's money query.
+    const comps = (d.ai_visibility && d.ai_visibility.competitors) || [];
+    const cu = document.getElementById("cmpUrl");
+    if (comps.length && comps[0].domain) {
+      if (cu) cu.value = comps[0].domain;
+      doCompare(comps[0].domain, true, comps[0].domain);
+    }
   }
 
   // fix-it generators + copy buttons
@@ -722,14 +730,17 @@
     if (you < them) return "They're ahead by " + (them - you) + " points. We can close that gap — that's exactly what GEOwallah does.";
     return "Neck and neck — small AI-visibility wins will tip it your way.";
   }
-  document.addEventListener("click", async function (e) {
-    if (e.target.id !== "cmpGo") return;
-    const cu = document.getElementById("cmpUrl").value.trim();
+  async function doCompare(cu, isAuto, autoDom) {
+    cu = (cu || "").trim();
     const out = document.getElementById("cmpOut");
-    if (!cu) return;
-    const old = e.target.textContent;
-    e.target.disabled = true; e.target.textContent = "Comparing…";
-    out.hidden = false; out.innerHTML = '<p class="lead">Auditing ' + esc(cu) + '… this takes a few seconds.</p>';
+    const btn = document.getElementById("cmpGo");
+    if (!cu || !out) return;
+    let oldBtn = "";
+    if (btn) { oldBtn = btn.textContent; btn.disabled = true; btn.textContent = "Comparing…"; }
+    const lead = isAuto
+      ? 'Benchmarking the rival AI names for your search — <b>' + esc(cu) + '</b>…'
+      : 'Auditing ' + esc(cu) + '… this takes a few seconds.';
+    out.hidden = false; out.innerHTML = '<p class="lead">' + lead + '</p>';
     try {
       const ctx = bizCtx();
       const r = await fetch(API + "/compare", {
@@ -742,13 +753,21 @@
       } else {
         const you = (lastData && lastData.overall_score != null) ? lastData.overall_score : "—";
         const them = (data.score != null) ? data.score : "—";
-        out.innerHTML = '<div class="cmp-cards">' +
+        const head = isAuto
+          ? '<p class="cmp-head">AI is naming <b>' + esc(data.host || cu) + '</b> for your search' +
+            (data.ai_position ? ' (live rank #' + data.ai_position + ')' : "") +
+            ' — here\'s how you compare:</p>'
+          : "";
+        out.innerHTML = head + '<div class="cmp-cards">' +
           cmpCard((lastData && lastData.host) || "You", you, lastData && lastData.grade, true) +
           cmpCard(data.host || cu, them, data.grade, false) + '</div>' +
           '<p class="ai-note">' + cmpVerdict(you, them) + '</p>';
       }
     } catch (err) { out.innerHTML = '<p class="lead">Network error — please retry.</p>'; }
-    finally { e.target.disabled = false; e.target.textContent = old; }
+    finally { if (btn) { btn.disabled = false; btn.textContent = oldBtn; } }
+  }
+  document.addEventListener("click", function (e) {
+    if (e.target.id === "cmpGo") doCompare(document.getElementById("cmpUrl").value, false);
   });
 
   // prefill from ?url=

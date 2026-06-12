@@ -94,6 +94,24 @@
   function render(d) {
     results.hidden = false;
     lastData = d;
+
+    // make the live-chat (Intercom) aware of what this visitor just audited
+    if (window.GEOwallahIntercom) {
+      var v = d.ai_visibility || {};
+      var rival = (v.competitors && v.competitors[0]) ? v.competitors[0].domain : "";
+      window.GEOwallahIntercom.setAuditContext({
+        website: d.host,
+        business: document.getElementById("afName").value.trim(),
+        city: document.getElementById("afCity").value.trim(),
+        category: document.getElementById("afCat").value.trim(),
+        score: d.overall_score,
+        grade: d.grade,
+        ai_query: v.query || "",
+        ai_tier: v.tier || "",
+        top_rival: rival
+      });
+    }
+
     // host
     document.getElementById("arHost").textContent = d.host || "your site";
     renderVis(d.ai_visibility);

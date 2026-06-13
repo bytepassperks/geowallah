@@ -262,6 +262,8 @@ h3{font-size:1.4rem;letter-spacing:-.01em}
 .pkg:nth-child(4) .pk-ico{background:var(--coral)}
 .pkg:nth-child(5) .pk-ico{background:var(--violet)}.pkg:nth-child(5) .pk-ico svg{stroke:#fff}
 .pkg:nth-child(6) .pk-ico{background:var(--teal)}
+.pkg:nth-child(7) .pk-ico{background:var(--amber)}
+.pkg:nth-child(8) .pk-ico{background:var(--violet)}.pkg:nth-child(8) .pk-ico svg{stroke:#fff}
 .pkg .pk-top{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
 .pkg h3{font-size:1.18rem}
 .pkg .pk-price{font-family:var(--font-d);font-size:1.35rem;color:var(--violet);white-space:nowrap}

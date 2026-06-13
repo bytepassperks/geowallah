@@ -1,14 +1,55 @@
+# GEOwallah robots.txt — humans, search engines, and AI engines all welcome.
+
 User-agent: *
 Allow: /
 
-# AI crawlers welcome (GEO/AEO)
+# --- AI / LLM crawlers (GEO / AEO) explicitly welcomed ---
+# OpenAI (ChatGPT search + training + user fetch)
 User-agent: GPTBot
 Allow: /
 User-agent: OAI-SearchBot
 Allow: /
+User-agent: ChatGPT-User
+Allow: /
+
+# Perplexity
 User-agent: PerplexityBot
 Allow: /
+User-agent: Perplexity-User
+Allow: /
+
+# Google AI (Gemini / Vertex / AI Overviews extended)
 User-agent: Google-Extended
+Allow: /
+
+# Anthropic (Claude)
+User-agent: ClaudeBot
+Allow: /
+User-agent: anthropic-ai
+Allow: /
+User-agent: Claude-Web
+Allow: /
+
+# Microsoft / Bing (Copilot leans on the Bing index)
+User-agent: bingbot
+Allow: /
+
+# Apple Intelligence / Siri
+User-agent: Applebot
+Allow: /
+User-agent: Applebot-Extended
+Allow: /
+
+# Common Crawl (feeds many LLM training sets) + others
+User-agent: CCBot
+Allow: /
+User-agent: Amazonbot
+Allow: /
+User-agent: cohere-ai
+Allow: /
+User-agent: Bytespider
+Allow: /
+User-agent: Meta-ExternalAgent
 Allow: /
 
 Sitemap: https://geowallah.com/sitemap.xml

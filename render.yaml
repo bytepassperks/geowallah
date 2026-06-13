@@ -7,14 +7,43 @@ services:
     staticPublishPath: .
     pullRequestPreviewsEnabled: true
     headers:
+      # Security headers (apply to all responses)
       - path: /*
         name: X-Frame-Options
         value: SAMEORIGIN
+      - path: /*
+        name: X-Content-Type-Options
+        value: nosniff
+      - path: /*
+        name: Referrer-Policy
+        value: strict-origin-when-cross-origin
+      - path: /*
+        name: Strict-Transport-Security
+        value: max-age=63072000; includeSubDomains; preload
+      - path: /*
+        name: Permissions-Policy
+        value: geolocation=(), microphone=(), camera=(), interest-cohort=()
+      # Long-cache immutable static assets
       - path: /assets/*
         name: Cache-Control
         value: public, max-age=31536000, immutable
+      # AI/LLM + crawler files: correct content type + short cache
+      - path: /llms.txt
+        name: Content-Type
+        value: text/plain; charset=utf-8
+      - path: /llms.txt
+        name: Cache-Control
+        value: public, max-age=86400
+      - path: /llms-full.txt
+        name: Content-Type
+        value: text/plain; charset=utf-8
+      - path: /llms-full.txt
+        name: Cache-Control
+        value: public, max-age=86400
+      - path: /robots.txt
+        name: Cache-Control
+        value: public, max-age=86400
     routes:
-      # SPA-style fallback not needed (multi-page), but serve custom 404
       - type: rewrite
         source: /home
         destination: /index.html

@@ -1,0 +1,22 @@
+# GEOwallah
+
+> GEOwallah is an AI-search optimization agency based in Barrackpore, West Bengal, India, serving businesses across India. We make a business the answer customers see and the brand AI engines recommend — across Google Search, Google Maps / local pack, and generative engines (ChatGPT, Gemini, Perplexity, Copilot). Services span GEO (Generative Engine Optimization), AEO (Answer Engine Optimization), SEO & AI SEO, Local SEO / Google Business Profile, website & store development, content, citations, and digital marketing.
+
+GEOwallah's core promise: leads over vanity metrics, presence everywhere customers search (classic + AI), and total transparency. Contact: rankme@geowallah.com · WhatsApp +91 7003888936.
+
+## Core pages
+- [Home](https://geowallah.com/): What GEOwallah does — get found on Google, cited by AI, chosen locally.
+- [Services](https://geowallah.com/services.html): Full service list — AI GEO/LLM optimization, AEO, SEO & AI SEO, Local SEO & Google Business Profile, web & store development, content, citations, marketing.
+- [Pricing](https://geowallah.com/pricing.html): Transparent monthly growth plans (₹5k / ₹9k / ₹18k) and one-time packages — GBP Kickstart, Starter Website, Online Store, Local SEO Sprint, Citation Blast, Custom Software.
+- [Free AI & SEO Visibility Audit](https://geowallah.com/audit.html): Instant free audit of a website's visibility across Google, AI engines and local search, with a score and prioritised fixes.
+- [About](https://geowallah.com/about.html): Why GEOwallah exists, positioning, and principles.
+- [Contact](https://geowallah.com/contact.html): Get a free visibility audit via WhatsApp, email or form. Barrackpore, North 24 Parganas, serving all of India.
+
+## Topics & expertise
+- [Blog — AI Search, GEO & Local SEO insights](https://geowallah.com/blog.html): Practical guides on GEO, AI SEO, local SEO and getting cited by ChatGPT, Gemini and Google AI Overviews.
+
+## Full reference
+- [llms-full.txt — expanded reference](https://geowallah.com/llms-full.txt): The complete, quotable site reference for AI/LLM crawlers (services, pricing, FAQs, expertise).
+
+## Optional
+- Service area: Barrackpore and all of India (remote). Local focus: North 24 Parganas, Kolkata metro.

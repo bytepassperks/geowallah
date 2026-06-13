@@ -398,9 +398,9 @@ h3{font-size:1.4rem;letter-spacing:-.01em}
 .footer h4{font-family:var(--font-s);font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:#8b857a;margin-bottom:14px}
 .footer .foot-grid a{display:block;color:#d8d2c6;font-size:.92rem;padding:5px 0}
 .footer .foot-grid a:hover{color:var(--teal-bright)}
-.socials{display:flex;gap:10px;margin-top:16px}
-.socials a{width:38px;height:38px;border:2px solid #3a352c;border-radius:10px;display:grid;place-items:center}
-.socials a svg{width:18px;height:18px;stroke:#d8d2c6}
+.socials{display:flex;gap:12px;margin-top:16px}
+.socials a{width:42px;height:42px;border:2px solid #3a352c;border-radius:10px;display:flex;align-items:center;justify-content:center;overflow:visible}
+.socials a svg{width:20px;height:20px;stroke:#d8d2c6;overflow:visible;flex-shrink:0}
 .socials a:hover{border-color:var(--teal-bright)}
 .foot-bottom{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-top:44px;padding-top:22px;border-top:1px solid #33302a;color:#8b857a;font-size:.84rem}
 

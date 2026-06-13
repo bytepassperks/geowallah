@@ -266,6 +266,8 @@ h3{font-size:1.4rem;letter-spacing:-.01em}
 .pkg h3{font-size:1.18rem}
 .pkg .pk-price{font-family:var(--font-d);font-size:1.35rem;color:var(--violet);white-space:nowrap}
 .pkg p{font-size:.9rem;color:var(--ink-2);margin-top:8px}
+.pkg .pk-cta{display:inline-flex;align-items:center;gap:6px;margin-top:14px;font-family:var(--font-d);font-weight:700;font-size:.9rem;color:var(--violet);text-decoration:none;border-bottom:2px solid transparent;transition:border-color .15s var(--ease)}
+.pkg .pk-cta:hover{border-bottom-color:var(--violet)}
 
 /* ---------- testimonials ---------- */
 .quotes{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}

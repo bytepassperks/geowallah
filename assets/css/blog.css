@@ -1,0 +1,71 @@
+/* ============================================================
+   GEOwallah — Blog / article styles
+   Extends the editorial design system (style.css) for post pages,
+   the blog index grid, topic hubs, key takeaways and FAQ.
+   ============================================================ */
+
+/* --- index / hub cards with real images --- */
+.post a{display:block;color:inherit}
+.post .thumb{padding:0;overflow:hidden}
+.post .thumb img{width:100%;height:100%;object-fit:cover}
+.post:nth-child(3n+1) .thumb,
+.post:nth-child(3n+2) .thumb,
+.post:nth-child(3n) .thumb{background:var(--paper-2)}
+.post .body p{color:var(--ink-2);font-size:.95rem;line-height:1.55}
+
+/* --- post hero / meta --- */
+.post-hero .lead{max-width:70ch}
+.post-meta{margin-top:14px;font-size:.85rem;font-weight:600;color:var(--ink-3);letter-spacing:.01em}
+.post-meta time{color:var(--ink-3)}
+
+/* --- post layout --- */
+.post-wrap{max-width:760px}
+.post-figure{margin:0 0 36px;border:2px solid var(--ink);border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--shadow-sm)}
+.post-figure img{width:100%;height:auto;display:block}
+
+/* --- article prose --- */
+.prose{font-size:1.075rem;line-height:1.72;color:var(--ink)}
+.prose > *{max-width:68ch}
+.prose h2{font-size:clamp(1.6rem,3vw,2.15rem);line-height:1.12;margin:2.1em 0 .55em}
+.prose h2:first-child{margin-top:0}
+.prose h3{font-size:1.3rem;margin:1.6em 0 .4em}
+.prose p{margin:0 0 1.15em;color:var(--ink-2)}
+.prose strong{color:var(--ink);font-weight:700}
+.prose a{color:var(--teal);text-decoration:underline;text-underline-offset:2px;text-decoration-thickness:1.5px}
+.prose a:hover{color:var(--violet)}
+.prose ul,.prose ol{margin:0 0 1.3em;padding-left:1.3em}
+.prose ul{list-style:disc}
+.prose ol{list-style:decimal}
+.prose li{margin:0 0 .5em;color:var(--ink-2);padding-left:.2em}
+.prose li::marker{color:var(--teal)}
+.prose blockquote{margin:1.4em 0;padding:.6em 1.1em;border-left:3px solid var(--teal);background:var(--paper-2);border-radius:0 var(--r) var(--r) 0;font-style:italic;color:var(--ink-2)}
+.prose table{width:100%;border-collapse:collapse;margin:1.4em 0;font-size:.96rem}
+.prose th,.prose td{border:1.5px solid var(--hair);padding:.6em .8em;text-align:left}
+.prose th{background:var(--paper-2);font-weight:700;color:var(--ink)}
+
+/* --- key takeaways --- */
+.key-takeaways{max-width:68ch;margin:2.4em 0;padding:24px 26px;background:var(--paper-2);border:2px solid var(--ink);border-radius:var(--r-lg);box-shadow:var(--shadow-sm)}
+.key-takeaways h2{font-size:1.25rem;margin:0 0 .6em}
+.key-takeaways ul{list-style:none;padding:0;margin:0}
+.key-takeaways li{position:relative;padding-left:1.6em;margin:0 0 .55em;color:var(--ink-2)}
+.key-takeaways li::before{content:"✦";position:absolute;left:0;color:var(--teal);font-size:.9em}
+
+/* --- FAQ --- */
+.faq{max-width:68ch;margin:2.6em 0 0}
+.faq > h2{margin-bottom:.5em}
+.faq-item{border-top:1.5px solid var(--hair);padding:18px 0}
+.faq-item:last-child{border-bottom:1.5px solid var(--hair)}
+.faq-q{font-size:1.15rem;margin:0 0 .35em}
+.faq-a p{margin:0;color:var(--ink-2)}
+
+/* --- related guides --- */
+.related{max-width:68ch;margin:2.8em 0 0;padding:22px 26px;border:2px dashed var(--ink-3);border-radius:var(--r-lg)}
+.related h2{font-size:1.2rem;margin:0 0 .5em}
+.related ul{list-style:none;padding:0;margin:0;display:grid;gap:.5em}
+.related a{color:var(--teal);text-decoration:none;font-weight:600}
+.related a:hover{color:var(--violet);text-decoration:underline}
+
+@media (max-width:720px){
+  .prose{font-size:1.02rem}
+  .post-wrap{max-width:100%}
+}

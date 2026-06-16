@@ -50,9 +50,10 @@
 .key-takeaways li{position:relative;padding-left:1.6em;margin:0 0 .55em;color:var(--ink-2)}
 .key-takeaways li::before{content:"✦";position:absolute;left:0;color:var(--teal);font-size:.9em}
 
-/* --- FAQ --- */
-.faq{max-width:68ch;margin:2.6em 0 0}
-.faq > h2{margin-bottom:.5em}
+/* --- FAQ (blog/article style only; scoped so it doesn't override the
+   centered accordion `.faq` used on the homepage & local pages) --- */
+.faq:has(.faq-item){max-width:68ch;margin:2.6em 0 0}
+.faq:has(.faq-item) > h2{margin-bottom:.5em}
 .faq-item{border-top:1.5px solid var(--hair);padding:18px 0}
 .faq-item:last-child{border-bottom:1.5px solid var(--hair)}
 .faq-q{font-size:1.15rem;margin:0 0 .35em}

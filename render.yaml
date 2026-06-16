@@ -47,3 +47,10 @@ services:
       - type: rewrite
         source: /home
         destination: /index.html
+      # Branded, opaque proof links for the Directory Listings service. The
+      # client's backlink report prints geowallah.com/verify/<token>; forward
+      # it to the audit API, which validates the signed token and 302-redirects
+      # to the live listing. Keeps the directory source out of the document.
+      - type: redirect
+        source: /verify/*
+        destination: https://api.geowallah.com/verify/*

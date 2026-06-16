@@ -25,7 +25,7 @@ services:
         value: geolocation=(), microphone=(), camera=(), interest-cohort=()
       - path: /*
         name: Content-Security-Policy
-        value: "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com https://api.geowallah.com; frame-ancestors 'self'; base-uri 'self'; form-action 'self' https://wa.me https://api.geowallah.com; object-src 'none'"
+        value: "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com https://api.geowallah.com; frame-src https://www.google.com https://maps.google.com; frame-ancestors 'self'; base-uri 'self'; form-action 'self' https://wa.me https://api.geowallah.com; object-src 'none'"
       # Long-cache immutable static assets
       - path: /assets/*
         name: Cache-Control

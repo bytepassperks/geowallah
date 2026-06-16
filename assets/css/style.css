@@ -393,7 +393,7 @@ h3{font-size:1.4rem;letter-spacing:-.01em}
 
 /* ---------- footer ---------- */
 .footer{background:var(--ink);color:var(--paper);padding:64px 0 28px;border-top:2px solid var(--ink)}
-.foot-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:34px}
+.foot-grid{display:grid;grid-template-columns:1.5fr repeat(4,1fr);gap:34px}
 .footer .brand{color:#fff}
 .footer .brand span b{color:var(--teal-bright)}
 .footer p{color:#b8b2a6;font-size:.92rem;margin-top:14px;max-width:36ch}

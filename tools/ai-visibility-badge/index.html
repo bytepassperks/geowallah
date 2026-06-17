@@ -154,9 +154,24 @@
 
     <div class="block" data-reveal style="max-width:760px;margin:30px auto 0">
       <span class="t-out-label">Live preview</span>
-      <div style="margin:14px 0 22px">
-        <iframe src="https://api.geowallah.com/embed?url=geowallah.com" title="AI Visibility Score" style="border:0;width:280px;height:118px;border-radius:14px;box-shadow:0 4px 20px rgba(0,0,0,.12)" loading="lazy"></iframe>
+      <div style="margin:14px 0 22px" id="badgePreview" data-embed="https://api.geowallah.com/embed?url=geowallah.com">
+        <a href="/audit.html" target="_blank" rel="noopener" style="font-family:system-ui,Segoe UI,Roboto,sans-serif;background:#fff;border:1px solid #eee;border-radius:14px;padding:14px 16px;width:248px;display:inline-block;text-decoration:none;color:inherit;box-shadow:0 4px 20px rgba(0,0,0,.12)">
+          <div style="font-size:40px;font-weight:800;line-height:1;color:#16a34a">100</div>
+          <div style="font-size:12px;color:#444;margin-top:4px">AI-Visibility Score &middot; Excellent</div>
+          <div style="font-size:11px;color:#6d28d9;font-weight:700;margin-top:8px">Powered by GEOwallah &#8599;</div>
+        </a>
       </div>
+      <script>
+      (function(){
+        var box=document.getElementById('badgePreview');
+        if(!box)return;
+        fetch(box.getAttribute('data-embed')).then(function(r){return r.ok?r.text():null;}).then(function(t){
+          if(!t)return;
+          var b=t.match(/<body[^>]*>([\s\S]*?)<\/body>/i),s=t.match(/<style[^>]*>[\s\S]*?<\/style>/i);
+          if(b)box.innerHTML=(s?s[0]:'')+b[1];
+        }).catch(function(){});
+      })();
+      </script>
       <span class="t-out-label">Paste this where you want the badge</span>
       <div class="t-out-head" style="margin-top:10px"><span></span><div class="t-out-btns"><button type="button" class="btn btn-ghost btn-sm" id="copyBadge">Copy code</button></div></div>
       <pre class="t-code"><code id="badgeCode">&lt;script src=&quot;https://api.geowallah.com/widget.js&quot; data-url=&quot;yourbusiness.com&quot; async&gt;&lt;/script&gt;</code></pre>

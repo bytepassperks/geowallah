@@ -17,6 +17,7 @@ URL mapping (matches the static site layout):
 from __future__ import annotations
 
 import json
+import os
 import subprocess
 import sys
 import urllib.error
@@ -33,12 +34,21 @@ SKIP = {"robots.txt", "404.html"}
 
 
 def changed_files() -> list[str]:
-    """Files changed in the latest commit (HEAD vs its parent)."""
+    """Files changed in the triggering push.
+
+    Prefers the explicit push range ``DIFF_BASE..DIFF_HEAD`` (set by the deploy
+    workflow) so the right files are diffed even after the sitemap auto-commit
+    moves HEAD. Falls back to ``HEAD~1..HEAD`` for local/manual runs.
+    """
+    base = os.environ.get("DIFF_BASE", "").strip()
+    head = os.environ.get("DIFF_HEAD", "").strip() or "HEAD"
+    # An all-zero base is GitHub's "branch created" sentinel — no usable range.
+    if base and set(base) != {"0"}:
+        diff_args = ["git", "diff", "--name-only", base, head]
+    else:
+        diff_args = ["git", "diff", "--name-only", "HEAD~1", "HEAD"]
     try:
-        out = subprocess.check_output(
-            ["git", "diff", "--name-only", "HEAD~1", "HEAD"],
-            text=True,
-        )
+        out = subprocess.check_output(diff_args, text=True)
     except subprocess.CalledProcessError:
         # First commit / no parent: fall back to everything tracked.
         out = subprocess.check_output(["git", "ls-files"], text=True)

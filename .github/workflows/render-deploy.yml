@@ -32,7 +32,7 @@ jobs:
     # below) to avoid an infinite loop and a redundant deploy. Uses startsWith
     # (not contains) so an unrelated commit/PR body mentioning the marker still
     # deploys normally.
-    if: ${{ github.event_name == 'workflow_dispatch' || !startsWith(github.event.head_commit.message, 'chore: regenerate sitemap') }}
+    if: "${{ github.event_name == 'workflow_dispatch' || !startsWith(github.event.head_commit.message, 'chore: regenerate sitemap') }}"
     steps:
       - name: Checkout (full history for accurate lastmod)
         uses: actions/checkout@v4

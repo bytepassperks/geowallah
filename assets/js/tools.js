@@ -148,7 +148,7 @@
     }
     if (d.competitors && d.competitors.length) {
       html += '<p class="t-out-label" style="margin-top:18px">Who AI sees instead</p><ol class="t-rivals">' +
-        d.competitors.slice(0, 5).map((c) => "<li>" + esc(c.domain || c.title || "") + "</li>").join("") + "</ol>";
+        d.competitors.slice(0, 5).map((c) => "<li>" + esc(c.name || c.domain || c.title || "") + "</li>").join("") + "</ol>";
     }
     html += '<p class="t-out-note">Want to be the name AI engines recommend? ' +
       '<a href="/services.html">See our AI search (GEO/AEO) optimization</a> or ' +

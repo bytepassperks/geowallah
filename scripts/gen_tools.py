@@ -279,7 +279,7 @@ def tool_page(t):
     parts.append(cta_band(*t["cta"]))
     parts.append(more_tools(t["slug"]))
     parts.append(FOOTER)
-    parts.append('<script src="/assets/js/tools.js?v=20260618a"></script>\n</body>\n</html>')
+    parts.append('<script src="/assets/js/tools.js?v=20260618b"></script>\n</body>\n</html>')
     return "\n".join(parts)
 
 

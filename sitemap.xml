@@ -3,124 +3,124 @@
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://geowallah.com/</loc>
-    <lastmod>2026-06-15</lastmod>
+    <lastmod>2026-06-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <image:image><image:loc>https://geowallah.com/assets/img/og-default.png</image:loc></image:image>
   </url>
   <url>
-    <loc>https://geowallah.com/services.html</loc>
-    <lastmod>2026-06-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://geowallah.com/pricing.html</loc>
-    <lastmod>2026-06-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://geowallah.com/audit.html</loc>
-    <lastmod>2026-06-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
     <loc>https://geowallah.com/about.html</loc>
-    <lastmod>2026-06-15</lastmod>
+    <lastmod>2026-06-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://geowallah.com/audit.html</loc>
+    <lastmod>2026-06-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
     <loc>https://geowallah.com/blog.html</loc>
-    <lastmod>2026-06-15</lastmod>
+    <lastmod>2026-06-18</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://geowallah.com/contact.html</loc>
-    <lastmod>2026-06-15</lastmod>
+    <lastmod>2026-06-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://geowallah.com/seo-company-kolkata/</loc>
-    <lastmod>2026-06-15</lastmod>
+    <loc>https://geowallah.com/pricing.html</loc>
+    <lastmod>2026-06-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://geowallah.com/barrackpore/</loc>
-    <lastmod>2026-06-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://geowallah.com/sodepur/</loc>
-    <lastmod>2026-06-15</lastmod>
+    <loc>https://geowallah.com/services.html</loc>
+    <lastmod>2026-06-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://geowallah.com/ai-search-optimization/</loc>
-    <lastmod>2026-06-15</lastmod>
+    <lastmod>2026-06-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
     <image:image><image:loc>https://geowallah.com/assets/img/blog/ai-search-optimization.webp</image:loc><image:caption>Editorial illustration of interlocking neural-network nodes and a search/answer glyph, representing ai search optimization, in teal and violet on a cream background.</image:caption></image:image>
   </url>
   <url>
     <loc>https://geowallah.com/ai-search-optimization/what-is-answer-engine-optimization/</loc>
-    <lastmod>2026-06-15</lastmod>
+    <lastmod>2026-06-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
     <image:image><image:loc>https://geowallah.com/assets/img/blog/what-is-answer-engine-optimization.webp</image:loc><image:caption>Editorial illustration of interlocking neural-network nodes and a search/answer glyph, representing what is answer engine optimization, in teal and violet on a cream background.</image:caption></image:image>
   </url>
   <url>
+    <loc>https://geowallah.com/barrackpore/</loc>
+    <lastmod>2026-06-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
     <loc>https://geowallah.com/google-business-profile/</loc>
-    <lastmod>2026-06-15</lastmod>
+    <lastmod>2026-06-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
     <image:image><image:loc>https://geowallah.com/assets/img/blog/google-business-profile-optimization.webp</image:loc><image:caption>Editorial illustration of an abstract map-pack card with a location marker and star motif, representing google business profile optimization, in teal and violet on a cream background.</image:caption></image:image>
   </url>
   <url>
     <loc>https://geowallah.com/local-seo-india/</loc>
-    <lastmod>2026-06-15</lastmod>
+    <lastmod>2026-06-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
     <image:image><image:loc>https://geowallah.com/assets/img/blog/local-seo-india.webp</image:loc><image:caption>Editorial illustration of a stylised map pin over an abstract Indian city skyline grid, representing local seo india, in teal and violet on a cream background.</image:caption></image:image>
   </url>
   <url>
     <loc>https://geowallah.com/local-seo/</loc>
-    <lastmod>2026-06-15</lastmod>
+    <lastmod>2026-06-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
     <image:image><image:loc>https://geowallah.com/assets/img/blog/local-seo.webp</image:loc><image:caption>Editorial illustration of a network of connected location pins and directory cards, representing local seo, in teal and violet on a cream background.</image:caption></image:image>
   </url>
   <url>
+    <loc>https://geowallah.com/seo-company-kolkata/</loc>
+    <lastmod>2026-06-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
     <loc>https://geowallah.com/seo-fundamentals/</loc>
-    <lastmod>2026-06-15</lastmod>
+    <lastmod>2026-06-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
     <image:image><image:loc>https://geowallah.com/assets/img/blog/on-page-seo.webp</image:loc><image:caption>Editorial illustration of layered building blocks forming an upward ranking staircase, representing on-page seo, in teal and violet on a cream background.</image:caption></image:image>
   </url>
   <url>
+    <loc>https://geowallah.com/seo-fundamentals/best-seo-agency-in-barrackpore/</loc>
+    <lastmod>2026-06-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <image:image><image:loc>https://geowallah.com/assets/img/blog/best-seo-agency-in-barrackpore.webp</image:loc><image:caption>Editorial illustration of layered building blocks forming an upward ranking staircase, representing the best seo agency in barrackpore, in teal and violet on a cream background.</image:caption></image:image>
+  </url>
+  <url>
     <loc>https://geowallah.com/seo-fundamentals/best-seo-agency-in-gurgaon/</loc>
-    <lastmod>2026-06-15</lastmod>
+    <lastmod>2026-06-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
     <image:image><image:loc>https://geowallah.com/assets/img/blog/best-seo-agency-in-gurgaon.webp</image:loc><image:caption>Editorial illustration of layered building blocks forming an upward ranking staircase, representing best seo agency in gurgaon, in teal and violet on a cream background.</image:caption></image:image>
   </url>
   <url>
-    <loc>https://geowallah.com/seo-fundamentals/best-seo-agency-in-barrackpore/</loc>
-    <lastmod>2026-06-11</lastmod>
+    <loc>https://geowallah.com/sodepur/</loc>
+    <lastmod>2026-06-17</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <image:image><image:loc>https://geowallah.com/assets/img/blog/best-seo-agency-in-barrackpore.webp</image:loc><image:caption>Editorial illustration of layered building blocks forming an upward ranking staircase, representing the best seo agency in barrackpore, in teal and violet on a cream background.</image:caption></image:image>
+    <priority>0.9</priority>
   </url>
   <url>
     <loc>https://geowallah.com/technical-seo/</loc>
-    <lastmod>2026-06-15</lastmod>
+    <lastmod>2026-06-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
     <image:image><image:loc>https://geowallah.com/assets/img/blog/technical-seo.webp</image:loc><image:caption>Editorial illustration of clean schema/code brackets and a page-speed gauge motif, representing technical seo, in teal and violet on a cream background.</image:caption></image:image>

@@ -6,6 +6,11 @@ name: Deploy to Render
 # announces the deploy automatically: changed URLs to IndexNow (Bing / Yandex /
 # Seznam) and the sitemap to Google Search Console. Covers any deploy — manual
 # PR merge or the blog drip.
+#
+# It also regenerates sitemap.xml from the page tree first, so blog-drip posts
+# (and any new page) always make it into the sitemap without hand-editing. The
+# regenerated sitemap is committed back to deploy BEFORE the deploy is
+# triggered, so Render publishes the complete, current sitemap.
 
 on:
   push:
@@ -16,14 +21,34 @@ concurrency:
   group: render-deploy
   cancel-in-progress: false
 
+permissions:
+  contents: write
+
 jobs:
   trigger:
     runs-on: ubuntu-latest
+    # The sitemap auto-commit pushes back to deploy, which re-triggers this
+    # workflow. Skip that run to avoid an infinite loop (and a redundant deploy).
+    if: ${{ github.event_name == 'workflow_dispatch' || !contains(github.event.head_commit.message, '[skip-sitemap]') }}
     steps:
-      - name: Checkout (with previous commit for diffing)
+      - name: Checkout (full history for accurate lastmod)
         uses: actions/checkout@v4
         with:
-          fetch-depth: 2
+          fetch-depth: 0
+
+      - name: Regenerate sitemap from page tree
+        run: |
+          python3 scripts/gen_sitemap.py
+          if git diff --quiet -- sitemap.xml; then
+            echo "Sitemap already current; nothing to commit."
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add sitemap.xml
+            git commit -m "chore: regenerate sitemap [skip-sitemap]"
+            git push origin HEAD:deploy
+            echo "Committed regenerated sitemap."
+          fi
 
       - name: Trigger Render deploy hook
         run: |
@@ -38,6 +63,11 @@ jobs:
         run: sleep 120
 
       - name: Submit changed URLs to IndexNow
+        # Diff the original push range (explicit SHAs) so the post URLs are
+        # picked up even though the sitemap auto-commit moved HEAD.
+        env:
+          DIFF_BASE: ${{ github.event.before }}
+          DIFF_HEAD: ${{ github.sha }}
         run: python3 scripts/indexnow_ping.py
 
       - name: Submit sitemap to Google Search Console

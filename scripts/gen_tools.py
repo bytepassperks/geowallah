@@ -14,7 +14,7 @@ import os
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SITE = "https://geowallah.com"
-CSSV = "20260618a"
+CSSV = "20260619a"
 
 NAV = """<header class="nav">
   <div class="container">
@@ -185,6 +185,7 @@ ALL = [
     ("meta-description-generator", "Meta Description Generator"),
     ("nap-checker", "NAP Checker"),
     ("sitemap-generator", "Sitemap Generator"),
+    ("website-security-checker", "Website Security Checker"),
     ("ai-visibility-badge", "AI Visibility Badge"),
 ]
 
@@ -279,7 +280,7 @@ def tool_page(t):
     parts.append(cta_band(*t["cta"]))
     parts.append(more_tools(t["slug"]))
     parts.append(FOOTER)
-    parts.append('<script src="/assets/js/tools.js?v=20260618b"></script>\n</body>\n</html>')
+    parts.append('<script src="/assets/js/tools.js?v=20260619a"></script>\n</body>\n</html>')
     return "\n".join(parts)
 
 
@@ -519,6 +520,40 @@ TOOLS = [
         "sa_desc": "Free tool that generates an XML sitemap (sitemap.xml) from a website's internal links.",
         "category": "DeveloperApplication",
     },
+    {
+        "slug": "website-security-checker",
+        "h1": "Free Website Security Checker",
+        "meta_title": "Free Website Security Checker \u2014 Malware, Hack & SSL Scan | GEOwallah",
+        "meta_desc": "Scan your website for malware, injected spam, backdoors, SSL/TLS issues and missing security headers in one click \u2014 free, instant, no signup. A clean, secure site ranks better.",
+        "lead": "Scan your site for malware, injected spam, backdoors, SSL problems and missing security headers in one click. A hacked or insecure site gets deranked and flagged by Google &mdash; we show you exactly what to fix.",
+        "endpoint": "/security", "kind": "", "render": "security",
+        "fields": [
+            {"id": "tUrl", "field": "url", "label": "Your website", "ph": "yourbusiness.com", "required": True},
+        ],
+        "hint": "Passive scan &middot; we never attack your site &middot; results in seconds.",
+        "loading_title": "Scanning your site&hellip;",
+        "loading_steps": ["Checking SSL &amp; TLS", "Reading security headers", "Scanning for malware &amp; injected code", "Checking reputation &amp; exposed files"],
+        "intro_html": "<h2>Why website security is also an SEO signal</h2><p>Search engines actively protect their users: a site that's hacked, serving malware, or pushing injected spam gets <b>deranked, flagged with a red &lsquo;this site may harm your computer&rsquo; warning, or removed from results entirely</b>. HTTPS is a confirmed Google ranking factor, and a broken or expired SSL certificate triggers a full-page browser warning that destroys your traffic and trust.</p><p>This checker runs a fast, <b>passive</b> scan &mdash; we only read what your site already exposes to any visitor, never attack it &mdash; and reports your SSL/TLS health, HTTP security headers, mixed content, software-version leaks, domain reputation, email anti-spoofing (SPF/DMARC), publicly exposed files, and tell-tale signs of malware, webshells, hidden link spam or a hacked site. Cleaning these up protects your visitors and your rankings at the same time.</p>",
+        "how_title": "How the security checker works",
+        "how_steps": [
+            ("Enter your URL", "We fetch your page over a normal HTTPS request and complete a TLS handshake &mdash; exactly what a browser does."),
+            ("We run passive checks", "SSL/cert, security headers, mixed content, version disclosure, malware &amp; injected-spam signatures, blocklist reputation, SPF/DMARC and exposed files."),
+            ("Fix what's flagged", "Each issue comes with a plain-English fix. Want it handled for you? We secure and monitor sites as part of our work."),
+        ],
+        "faqs": [
+            ("Is this a safe, non-intrusive scan?", "Yes. It's fully passive &mdash; we only read what your site already serves to any visitor (headers, HTML, certificate, public DNS). We never run intrusive attacks, port scans or exploit attempts."),
+            ("How does it detect if my site is hacked?", "It scans the served HTML/JS for known malware and webshell signatures, obfuscated <code>eval</code>/base64 payloads, crypto-miners, hidden injected iframes, cloaked redirects and injected spam keywords, and checks your domain against the Spamhaus blocklist."),
+            ("Does security really affect my Google ranking?", "Yes. HTTPS is a ranking factor, and hacked/malware/deceptive sites are demoted or delisted and flagged in Chrome and Search Console &mdash; which crushes clicks. A clean, secure site is a trust signal."),
+            ("What are security headers and SPF/DMARC?", "Security headers (CSP, HSTS, X-Frame-Options&hellip;) tell browsers how to safely load your site and block common attacks. SPF/DMARC are DNS records that stop attackers spoofing email from your domain. Both are trust signals."),
+            ("Can GEOwallah fix these issues for me?", "Absolutely &mdash; we harden security headers, fix SSL, clean hacked sites and set up email anti-spoofing as part of our <a href=\"/services.html\">services</a>. <a href=\"/contact.html\">Talk to us</a>."),
+        ],
+        "cta": ("Keep your site <span class=\"mark\">secure &amp; ranking</span>",
+                "We harden your security headers, fix SSL, clean and protect hacked sites, and set up SPF/DMARC &mdash; so Google and AI trust you.",
+                "Get my free audit", "/audit.html"),
+        "sa_name": "GEOwallah Website Security Checker",
+        "sa_desc": "Free passive scanner that checks a website for malware, injected spam, SSL/TLS issues, missing security headers and exposed files.",
+        "category": "SecurityApplication",
+    },
 ]
 
 
@@ -625,6 +660,7 @@ def hub_page():
         "meta-description-generator": ("Write a compelling, right-length SEO meta description that earns clicks &mdash; no placeholders.", "Classic SEO", '<svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h10"/></svg>'),
         "nap-checker": ("Check your Name, Address &amp; Phone signals &mdash; the core of local &amp; Map Pack ranking.", "Local SEO", '<svg viewBox="0 0 24 24"><path d="M12 21s-7-5.7-7-11a7 7 0 0 1 14 0c0 5.3-7 11-7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg>'),
         "sitemap-generator": ("Generate an XML sitemap so Google &amp; Bing crawl every page. Copy-paste ready.", "Classic SEO", '<svg viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="5" rx="1"/><rect x="3" y="16" width="6" height="5" rx="1"/><rect x="15" y="16" width="6" height="5" rx="1"/><path d="M12 8v4M12 12H6v4M12 12h6v4"/></svg>'),
+        "website-security-checker": ("Scan for malware, injected spam, backdoors, SSL issues &amp; missing security headers &mdash; security is an SEO signal.", "Security &middot; Trust", '<svg viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.4-3 8.3-7 10-4-1.7-7-5.6-7-10V6l7-3Z"/><path d="M9 12l2 2 4-4"/></svg>'),
         "ai-visibility-badge": ("Add a free live AI-visibility badge to your site in one line of code.", "Backlinks &middot; Brand", '<svg viewBox="0 0 24 24"><path d="M12 2l2.4 5 5.6.6-4 4 1 5.6L12 19l-5 2.8 1-5.6-4-4 5.6-.6z"/></svg>'),
     }
     items = []

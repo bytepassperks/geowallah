@@ -90,6 +90,29 @@
 .t-rivals { margin: 8px 0 0; padding-left: 22px; }
 .t-rivals li { margin-bottom: 6px; }
 
+/* ---- Security & Trust scanner ---- */
+.t-secscore { display: flex; align-items: baseline; gap: 8px; margin: 6px 0 4px; }
+.t-secscore b { font-family: var(--serif, "Fraunces", serif); font-size: 2.6rem; line-height: 1; }
+.t-secscore span { font-size: .95rem; color: #8b857a; font-weight: 600; }
+.t-secscore.ok b { color: #16a34a; }
+.t-secscore.warn b { color: #d97706; }
+.t-secscore.bad b { color: #dc2626; }
+.t-secsum { font-size: .92rem; color: #5b5650; margin: 0 0 16px; }
+.t-secsum .ok { color: #16a34a; font-weight: 700; }
+.t-secsum .warn { color: #d97706; font-weight: 700; }
+.t-secsum .bad { color: #dc2626; font-weight: 700; }
+.t-checks { display: grid; gap: 10px; }
+.t-check { display: flex; gap: 12px; align-items: flex-start; padding: 13px 15px; border-radius: 13px; background: #fff; border: 1px solid rgba(0, 0, 0, .07); }
+.t-check .t-check-ic { width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; color: #fff; font-weight: 800; font-size: .82rem; flex: none; }
+.t-check.pass .t-check-ic { background: #16a34a; }
+.t-check.warn .t-check-ic { background: #d97706; }
+.t-check.fail .t-check-ic { background: #dc2626; }
+.t-check.info .t-check-ic { background: #8b857a; }
+.t-check b { display: block; }
+.t-check span { display: block; font-size: .92rem; color: #5b5650; margin-top: 2px; }
+.t-check em { display: block; font-style: normal; font-size: .86rem; color: #8b857a; margin-top: 5px; }
+.t-check.fail { border-color: #dc262633; background: #fdecec55; }
+
 /* ---- error ---- */
 .t-error { max-width: 640px; margin: 24px auto 0; text-align: center; padding: 26px; border-radius: 16px; background: #fdecec; border: 1px solid #dc262633; }
 .t-error h3 { margin: 0 0 8px; }

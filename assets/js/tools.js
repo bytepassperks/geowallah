@@ -71,6 +71,7 @@
     show(out);
     if (render === "nap") renderNap(d);
     else if (render === "aivis") renderAivis(d);
+    else if (render === "security") renderSecurity(d);
     else renderText(d);
     out.scrollIntoView({ behavior: "smooth", block: "start" });
   }
@@ -153,6 +154,31 @@
     html += '<p class="t-out-note">Want to be the name AI engines recommend? ' +
       '<a href="/services.html">See our AI search (GEO/AEO) optimization</a> or ' +
       '<a href="/audit.html">run the full audit</a>.</p>';
+    out.innerHTML = html;
+  }
+
+  /* ---- Security & Trust scanner ---- */
+  function renderSecurity(d) {
+    const s = d.summary || {};
+    const score = typeof d.score === "number" ? d.score : 0;
+    const tone = score >= 85 ? "ok" : score >= 60 ? "warn" : "bad";
+    const ic = { pass: "&#10003;", warn: "&#9888;", fail: "&#10007;", info: "&#8226;" };
+    let html = '<div class="t-out-head"><span class="t-out-label">Security &amp; Trust for ' + esc(d.host || "your site") + '</span></div>';
+    html += '<div class="t-secscore ' + tone + '"><b>' + score + '</b><span>/100 &middot; ' + esc(d.grade || "") + '</span></div>';
+    html += '<p class="t-secsum">' +
+      '<span class="ok">' + (s.pass || 0) + ' passed</span> &middot; ' +
+      '<span class="warn">' + (s.warn || 0) + ' to improve</span> &middot; ' +
+      '<span class="bad">' + (s.fail || 0) + ' critical</span></p>';
+    if (d.items && d.items.length) {
+      html += '<div class="t-checks">' + d.items.map(function (i) {
+        return '<div class="t-check ' + esc(i.status) + '">' +
+          '<span class="t-check-ic">' + (ic[i.status] || ic.info) + '</span>' +
+          '<div><b>' + esc(i.label) + '</b><span>' + esc(i.detail) + '</span>' +
+          (i.advice ? '<em>' + esc(i.advice) + '</em>' : '') + '</div></div>';
+      }).join("") + '</div>';
+    }
+    html += '<p class="t-out-note">A secure, hack-free site is a Google trust &amp; ranking signal &mdash; malware or injected spam can get you delisted. ' +
+      'Want us to fix these and keep you protected? <a href="/contact.html">Talk to us</a> or <a href="/audit.html">run the full audit</a>.</p>';
     out.innerHTML = html;
   }
 })();

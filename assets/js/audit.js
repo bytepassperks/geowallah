@@ -98,7 +98,7 @@
     // make the live-chat (Intercom) aware of what this visitor just audited
     if (window.GEOwallahIntercom) {
       var v = d.ai_visibility || {};
-      var rival = (v.competitors && v.competitors[0]) ? v.competitors[0].domain : "";
+      var rival = (v.competitors && v.competitors[0]) ? (v.competitors[0].name || v.competitors[0].domain) : "";
       window.GEOwallahIntercom.setAuditContext({
         website: d.host,
         business: document.getElementById("afName").value.trim(),
@@ -249,7 +249,7 @@
       list.innerHTML = "";
       v.competitors.slice(0, 5).forEach((c) => {
         const li = document.createElement("li");
-        li.innerHTML = '<b>' + esc(c.domain) + "</b><span>" + esc(c.title) + "</span>";
+        li.innerHTML = '<b>' + esc(c.name || c.domain || c.title || "") + "</b>" + ((c.domain && c.title) ? "<span>" + esc(c.title) + "</span>" : "");
         list.appendChild(li);
       });
     } else {
@@ -340,7 +340,7 @@
       let comp = "";
       if (v.competitors && v.competitors.length && (!v.found || v.position > 1)) {
         comp = '<p style="margin:12px 0 4px;font-weight:700;font-size:12.5px;color:#17150F">Who AI is naming instead:</p><ol style="margin:0 0 0 18px;padding:0;font-size:12px;color:#3f3a31">' +
-          v.competitors.slice(0, 5).map((c) => '<li style="margin:2px 0"><b>' + esc(c.domain) + '</b> \u2014 ' + esc(c.title) + '</li>').join("") + '</ol>';
+          v.competitors.slice(0, 5).map((c) => '<li style="margin:2px 0"><b>' + esc(c.name || c.domain || c.title || "") + '</b>' + ((c.domain && c.title) ? ' \u2014 ' + esc(c.title) : '') + '</li>').join("") + '</ol>';
       }
       let gemBlk = "";
       const g = v.gemini;
@@ -575,7 +575,7 @@
 
         if (v.competitors && v.competitors.length && (!v.found || v.position > 1)) {
           para("Who AI is naming instead:", M, CW, 10, INK, "bold", 1.3); gap(0.5);
-          v.competitors.slice(0, 5).forEach((c, i) => { para((i + 1) + ". " + (c.domain || "") + " \u2014 " + (c.title || ""), M + 2, CW - 2, 9.5, GRY, "normal", 1.35); gap(0.6); });
+          v.competitors.slice(0, 5).forEach((c, i) => { para((i + 1) + ". " + (c.name || c.domain || c.title || "") + ((c.domain && c.title) ? " \u2014 " + c.title : ""), M + 2, CW - 2, 9.5, GRY, "normal", 1.35); gap(0.6); });
           gap(2.5);
         }
       }
@@ -696,9 +696,10 @@
     // Auto-benchmark the real rival AI names for this business's money query.
     const comps = (d.ai_visibility && d.ai_visibility.competitors) || [];
     const cu = document.getElementById("cmpUrl");
-    if (comps.length && comps[0].domain) {
-      if (cu) cu.value = comps[0].domain;
-      doCompare(comps[0].domain, true, comps[0].domain);
+    const webc = comps.find((c) => c.domain);
+    if (webc) {
+      if (cu) cu.value = webc.domain;
+      doCompare(webc.domain, true, webc.domain);
     }
   }
 

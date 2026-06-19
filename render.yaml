@@ -47,6 +47,10 @@ services:
         name: Cache-Control
         value: public, max-age=86400
     routes:
+      # Canonicalise the home page: /index.html -> / (avoids duplicate URLs).
+      - type: redirect
+        source: /index.html
+        destination: /
       - type: rewrite
         source: /home
         destination: /index.html

@@ -18,9 +18,9 @@ CSSV = "20260619a"
 
 NAV = """<header class="nav">
   <div class="container">
-    <a class="brand" href="/index.html"><img class="logo" width="34" height="34" decoding="async" src="/assets/img/logo.png" alt="GEOwallah logo"><span><b>GEO</b>wallah</span></a>
+    <a class="brand" href="/"><img class="logo" width="34" height="34" decoding="async" src="/assets/img/logo.png" alt="GEOwallah logo"><span><b>GEO</b>wallah</span></a>
     <nav class="nav-links">
-      <a href="/index.html">Home</a><a href="/services.html">Services</a><a href="/pricing.html">Pricing</a><a href="/tools/">Free tools</a><a href="/blog.html">Blog</a><a href="/contact.html">Contact</a>
+      <a href="/">Home</a><a href="/services.html">Services</a><a href="/pricing.html">Pricing</a><a href="/tools/">Free tools</a><a href="/blog.html">Blog</a><a href="/contact.html">Contact</a>
     </nav>
     <div class="nav-cta">
       <a class="btn btn-ghost btn-sm" href="/audit.html">Free audit</a>
@@ -34,7 +34,7 @@ FOOTER = """<footer class="footer">
   <div class="container">
     <div class="foot-grid">
       <div>
-        <a class="brand" href="/index.html"><img class="logo" width="34" height="34" decoding="async" src="/assets/img/logo.png" alt="GEOwallah"><span><b>GEO</b>wallah</span></a>
+        <a class="brand" href="/"><img class="logo" width="34" height="34" decoding="async" src="/assets/img/logo.png" alt="GEOwallah"><span><b>GEO</b>wallah</span></a>
         <p>Get found on Google. Get cited by AI. Get chosen locally. AI-search optimization rooted in Barrackpore, serving all of India.</p>
       </div>
       <div><h4>Services</h4><a href="/services.html">AI GEO / LLM</a><a href="/services.html">SEO &amp; AI SEO</a><a href="/services.html">Local SEO &amp; GMB</a><a href="/services.html">Web Development</a><a href="/services.html">Content &amp; Citations</a></div>
@@ -710,7 +710,7 @@ def hub_page():
 
 <section class="section" style="padding-top:0">
   <div class="container" style="max-width:820px">
-    <div data-reveal><h2>Built by an SEO &amp; AI-search agency</h2><p>These tools come from the same playbook we use for clients at <a href="/index.html">GEOwallah</a> &mdash; an AI-search optimization agency in Barrackpore serving all of India. Each one solves a real piece of getting found on Google and recommended by ChatGPT, Gemini and Perplexity. Use them free; when you want the fixes implemented end-to-end, <a href="/services.html">see what we do</a> or <a href="/audit.html">run a full free audit</a>.</p></div>
+    <div data-reveal><h2>Built by an SEO &amp; AI-search agency</h2><p>These tools come from the same playbook we use for clients at <a href="/">GEOwallah</a> &mdash; an AI-search optimization agency in Barrackpore serving all of India. Each one solves a real piece of getting found on Google and recommended by ChatGPT, Gemini and Perplexity. Use them free; when you want the fixes implemented end-to-end, <a href="/services.html">see what we do</a> or <a href="/audit.html">run a full free audit</a>.</p></div>
   </div>
 </section>""")
     parts.append(faq_html(faqs))

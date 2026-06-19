@@ -1,0 +1,28 @@
+name: IndexNow reindex (manual)
+
+# On-demand bulk submit of URLs to IndexNow (Bing / Yandex / Seznam) without a
+# deploy. Run from the Actions tab. Leave "urls" blank to resubmit every URL in
+# the live sitemap, or paste a whitespace/newline-separated list to target a
+# specific set. Google is unaffected (it ignores IndexNow); use the sitemap +
+# Search Console for Google.
+
+on:
+  workflow_dispatch:
+    inputs:
+      urls:
+        description: "URLs to submit (space/newline separated). Blank = all sitemap URLs."
+        required: false
+        default: ""
+
+jobs:
+  reindex:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Submit URLs to IndexNow
+        run: |
+          if [ -n "${{ github.event.inputs.urls }}" ]; then
+            printf '%s\n' "${{ github.event.inputs.urls }}" | python3 scripts/index_urls.py --file -
+          else
+            python3 scripts/index_urls.py
+          fi

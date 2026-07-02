@@ -47,6 +47,15 @@ services:
         name: Cache-Control
         value: public, max-age=86400
     routes:
+      # Retired service: PVC ID card printing was removed. 301 the old page to
+      # the print hub (Render deploys don't prune deleted files, so the stale
+      # file lingers on disk — this route intercepts it before it's served).
+      - type: redirect
+        source: /print/id-card-printing-barrackpore
+        destination: /print/
+      - type: redirect
+        source: /print/id-card-printing-barrackpore/*
+        destination: /print/
       # Canonicalise the home page: /index.html -> / (avoids duplicate URLs).
       - type: redirect
         source: /index.html

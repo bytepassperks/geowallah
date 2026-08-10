@@ -330,6 +330,13 @@
     <image:image><image:loc>https://geowallah.com/assets/img/blog/technical-seo.webp</image:loc><image:caption>Editorial illustration of clean schema/code brackets and a page-speed gauge motif, representing technical seo, in teal and violet on a cream background.</image:caption></image:image>
   </url>
   <url>
+    <loc>https://geowallah.com/technical-seo/checklist-for-on-page-seo/</loc>
+    <lastmod>2026-08-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <image:image><image:loc>https://geowallah.com/assets/img/blog/checklist-for-on-page-seo.webp</image:loc><image:caption>Editorial illustration of clean schema/code brackets and a page-speed gauge motif, representing checklist for on page seo, in teal and violet on a cream background.</image:caption></image:image>
+  </url>
+  <url>
     <loc>https://geowallah.com/technical-seo/core-web-vitals-check/</loc>
     <lastmod>2026-07-17</lastmod>
     <changefreq>monthly</changefreq>

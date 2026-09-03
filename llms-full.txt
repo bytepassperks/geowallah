@@ -84,6 +84,7 @@ Print pages:
 
 ## Blog posts
 
+- [What Are Core Web Vitals In SEO](https://geowallah.com/technical-seo/what-are-core-web-vitals-in-seo/): Core Web Vitals turn a good page experience into three numbers Google uses to rank. Here is what LCP, INP, and CLS mean for your SEO.
 - [Local SEO Audit](https://geowallah.com/local-seo/local-seo-audit/): A local SEO audit is a structured check of everything that decides whether nearby customers find you. Here is what to check and how to run one.
 - [Local SEO Packages India](https://geowallah.com/local-seo-india/local-seo-packages-india/): A local SEO package bundles the work that drives local rankings into a monthly plan. Here is what a good one includes and how to judge it.
 - [Local SEO Map Pack](https://geowallah.com/google-business-profile/local-seo-map-pack/): The Map Pack is the small group of three businesses Google shows at the top of a local search. Here is how it works and how to get in.

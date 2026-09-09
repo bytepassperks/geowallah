@@ -84,6 +84,7 @@ Print pages:
 
 ## Blog posts
 
+- [Local SEO Google My Business](https://geowallah.com/google-business-profile/local-seo-google-my-business/): Google My Business, now Google Business Profile, is the single biggest lever in local SEO. Here is how the profile and your wider signals connect.
 - [SEO Company Mumbai](https://geowallah.com/seo-fundamentals/seo-company-mumbai/): A buyer's guide to choosing an SEO company in Mumbai: what a good first month looks like, the red flags to avoid, and why method beats postcode.
 - [How To Rank In Google AI Overviews](https://geowallah.com/ai-search-optimization/how-to-rank-in-google-ai-overviews/): Google AI Overviews are generated summaries at the top of search. Here is where they get their facts and how to become a source they cite.
 - [What Are Core Web Vitals In SEO](https://geowallah.com/technical-seo/what-are-core-web-vitals-in-seo/): Core Web Vitals turn a good page experience into three numbers Google uses to rank. Here is what LCP, INP, and CLS mean for your SEO.

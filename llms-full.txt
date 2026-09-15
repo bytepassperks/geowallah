@@ -84,6 +84,7 @@ Print pages:
 
 ## Blog posts
 
+- [Technical SEO Audit Tool](https://geowallah.com/technical-seo/technical-seo-audit-tool/): A technical SEO audit tool crawls your site and lists the problems holding it back. Here are the free options and how to act on the report.
 - [Local Ranking](https://geowallah.com/local-seo/local-ranking/): Your local ranking is decided by three things Google weighs together: relevance, distance, and prominence. Here is how to build it.
 - [Freelance SEO Services In Kolkata](https://geowallah.com/local-seo-india/freelance-seo-services-in-kolkata/): Freelance SEO services in Kolkata offer direct attention and good value. Here is how a freelancer differs from an agency and how to vet one.
 - [Local SEO Google My Business](https://geowallah.com/google-business-profile/local-seo-google-my-business/): Google My Business, now Google Business Profile, is the single biggest lever in local SEO. Here is how the profile and your wider signals connect.

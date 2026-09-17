@@ -47,6 +47,7 @@ Print pages:
 
 ## Blog posts
 
+- [LLM SEO](https://geowallah.com/ai-search-optimization/llm-seo/): LLM SEO is the practice of making your business easy for large language models to understand, trust, and repeat. Here is how it works.
 - [Technical SEO Audit Tool](https://geowallah.com/technical-seo/technical-seo-audit-tool/): A technical SEO audit tool crawls your site and lists the problems holding it back. Here are the free options and how to act on the report.
 - [Local Ranking](https://geowallah.com/local-seo/local-ranking/): Your local ranking is decided by three things Google weighs together: relevance, distance, and prominence. Here is how to build it.
 - [Freelance SEO Services In Kolkata](https://geowallah.com/local-seo-india/freelance-seo-services-in-kolkata/): Freelance SEO services in Kolkata offer direct attention and good value. Here is how a freelancer differs from an agency and how to vet one.

@@ -84,6 +84,7 @@ Print pages:
 
 ## Blog posts
 
+- [What Is The Content Marketing](https://geowallah.com/seo-fundamentals/what-is-the-content-marketing/): Content marketing attracts and keeps customers by creating genuinely useful content rather than interrupting them with adverts. Here is how it works.
 - [LLM SEO](https://geowallah.com/ai-search-optimization/llm-seo/): LLM SEO is the practice of making your business easy for large language models to understand, trust, and repeat. Here is how it works.
 - [Technical SEO Audit Tool](https://geowallah.com/technical-seo/technical-seo-audit-tool/): A technical SEO audit tool crawls your site and lists the problems holding it back. Here are the free options and how to act on the report.
 - [Local Ranking](https://geowallah.com/local-seo/local-ranking/): Your local ranking is decided by three things Google weighs together: relevance, distance, and prominence. Here is how to build it.

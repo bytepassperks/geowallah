@@ -47,6 +47,7 @@ Print pages:
 
 ## Blog posts
 
+- [Google Keyword Research Tools](https://geowallah.com/seo-fundamentals/google-keyword-research-tools/): Google keyword research tools help you find the words and questions real people search, so you build content around what they actually want.
 - [AI SEO Optimization](https://geowallah.com/ai-search-optimization/ai-seo-optimization/): AI SEO optimization is the ongoing work of keeping your business chosen by AI tools and ranked by search engines. Here is the cycle and the tools.
 - [How To Check On Page SEO](https://geowallah.com/technical-seo/how-to-check-on-page-seo/): Checking on-page SEO means working through each page's elements systematically to find the gaps. Here is a practical method and the free tools to use.
 - [Citation For Local SEO](https://geowallah.com/local-seo/citation-for-local-seo/): A citation is any online mention of your business name, address, and phone. Here is why consistency matters and how to build and clean them.

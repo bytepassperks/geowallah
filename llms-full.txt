@@ -84,6 +84,7 @@ Print pages:
 
 ## Blog posts
 
+- [Advanced On Page SEO](https://geowallah.com/technical-seo/advanced-on-page-seo/): Advanced on-page SEO is what you do once the basics are solid: intent matching, topical depth, and content built to be quoted by snippets and AI.
 - [Local SEO Marketing](https://geowallah.com/local-seo/local-seo-marketing/): Local SEO marketing is the ongoing work of promoting your business so nearby customers find and choose you. Here are the channels and the routine.
 - [SEO Jobs In Kolkata For Freshers](https://geowallah.com/local-seo-india/seo-jobs-in-kolkata-for-freshers/): SEO jobs in Kolkata for freshers are an accessible path into digital marketing. Here is what they involve and how to land one with no experience.
 - [Google Maps SEO Near Me](https://geowallah.com/google-business-profile/google-maps-seo-near-me/): Google Maps SEO gets your business to show up when someone nearby searches for what you offer. Here is how to win high-intent near me searches.

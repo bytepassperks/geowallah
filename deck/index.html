@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GEOwallah — Daytona Startup Grid</title>
+<style>
+  :root{
+    --bg:#070d18;
+    --panel:#0d1524;
+    --line:rgba(255,255,255,.12);
+    --text:#eef2f8;
+    --muted:#93a0b8;
+    --teal:#14b8a6;
+    --violet:#8b5cf6;
+    --cyan:#22d3ee;
+    --amber:#f59e0b;
+    --sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:#03060c;color:var(--text);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+  body{zoom:calc(100vw / 1280);}
+  .deck{width:1280px;margin:0 auto}
+  .slide{
+    position:relative;width:1280px;height:720px;overflow:hidden;
+    background:
+      radial-gradient(820px 460px at 84% -14%, rgba(20,184,166,.20), transparent 62%),
+      radial-gradient(760px 480px at -8% 112%, rgba(139,92,246,.16), transparent 62%),
+      var(--bg);
+    padding:56px 68px 46px;display:flex;flex-direction:column;border-bottom:1px solid #000;
+  }
+  .slide:before{
+    content:"";position:absolute;inset:0;pointer-events:none;
+    background-image:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);
+    background-size:64px 64px;
+    mask-image:radial-gradient(900px 520px at 62% 34%,#000 30%,transparent 100%);
+  }
+  .slide > *{position:relative;z-index:1}
+  .top{display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--line);padding-bottom:12px;margin-bottom:30px}
+  .logo{display:flex;align-items:center;gap:9px;font-family:var(--sans);font-size:17px;font-weight:800;letter-spacing:-.02em;color:var(--text);text-transform:none}
+  .logo .mark{width:24px;height:24px;border-radius:7px;background:linear-gradient(135deg,var(--teal),var(--violet));display:grid;place-items:center;font-size:12px;font-weight:900;color:#04121a}
+  .kicker{font-family:var(--mono);font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--teal);margin-bottom:12px}
+  h1{font-size:78px;line-height:1.0;letter-spacing:-.04em;font-weight:800;max-width:820px}
+  h2{font-size:50px;line-height:1.05;letter-spacing:-.035em;font-weight:800;margin-bottom:28px;max-width:1020px}
+  .grad{background:linear-gradient(100deg,var(--teal),var(--cyan) 55%,var(--violet));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .lede{font-size:21px;line-height:1.5;color:var(--muted);max-width:780px}
+  .foot{display:flex;justify-content:space-between;align-items:flex-end;font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;color:var(--muted);margin-top:auto}
+  .cover .lede{margin-top:22px;font-size:23px}
+  .cover{flex-direction:column}
+  .cover-row{display:flex;gap:40px;flex:1;align-items:center}
+  .cover .left{display:flex;flex-direction:column;width:58%;align-self:stretch}
+  .cover .right{flex:1;display:flex;align-items:center;justify-content:center}
+  .mock{border:1px solid var(--line);background:rgba(255,255,255,.04);border-radius:16px;padding:16px 18px;box-shadow:0 24px 60px -24px rgba(0,0,0,.8)}
+  .mock .bar{display:flex;gap:5px;margin-bottom:12px}
+  .mock .bar i{width:7px;height:7px;border-radius:50%;background:#334155}
+  .mock .q{font-family:var(--mono);font-size:10.5px;color:var(--muted);letter-spacing:.06em;margin-bottom:8px}
+  .bubble{background:#111c2e;border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:13px;line-height:1.5;color:#cbd5e1}
+  .hl{color:#04121a;background:var(--teal);padding:1px 5px;border-radius:5px;font-weight:700}
+  .cards3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .card{background:rgba(255,255,255,.045);border:1px solid var(--line);border-radius:16px;padding:20px 20px}
+  .card h3{font-size:17px;margin-bottom:8px;letter-spacing:-.01em}
+  .card p{font-size:13.5px;line-height:1.5;color:var(--muted)}
+  .card .tag{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);margin-bottom:10px}
+  .cols{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-top:4px}
+  .surface{background:rgba(255,255,255,.045);border:1px solid var(--line);border-radius:16px;padding:18px 18px;display:flex;flex-direction:column;gap:10px}
+  .surface .name{display:flex;align-items:center;gap:8px;font-weight:700;font-size:15px}
+  .surface .dot{width:9px;height:9px;border-radius:50%}
+  .surface ul{list-style:none;display:flex;flex-direction:column;gap:6px;margin-top:4px}
+  .surface li{font-size:12.5px;color:var(--muted);line-height:1.45;padding-left:12px;position:relative}
+  .surface li:before{content:"";position:absolute;left:0;top:6px;width:5px;height:5px;border-radius:50%;background:var(--teal)}
+  .proof{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:6px}
+  .pcard{border:1px solid var(--line);border-radius:16px;padding:18px;background:linear-gradient(180deg,rgba(20,184,166,.10),rgba(255,255,255,.02))}
+  .pcard .n{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+  .pcard .v{font-size:34px;font-weight:800;letter-spacing:-.03em;margin:8px 0 4px}
+  .pcard .d{font-size:12.5px;color:var(--muted);line-height:1.45}
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:20px}
+  .stat{border:1px solid var(--line);border-radius:14px;padding:14px 16px;background:rgba(255,255,255,.03)}
+  .stat .v{font-size:26px;font-weight:800;letter-spacing:-.03em}
+  .stat .l{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:5px}
+  .flow{display:flex;align-items:stretch;gap:10px;margin-top:6px}
+  .node{flex:1;border:1px solid var(--line);border-radius:14px;padding:14px 14px;background:rgba(255,255,255,.035)}
+  .node .n{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;color:var(--teal);margin-bottom:7px}
+  .node .t{font-size:14px;font-weight:700;margin-bottom:4px}
+  .node .d{font-size:11.5px;color:var(--muted);line-height:1.4}
+  .arrow{align-self:center;color:#3b4a63;font-size:16px}
+  .split{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .panel{border:1px solid var(--line);border-radius:16px;padding:20px 22px;background:rgba(255,255,255,.04)}
+  .panel h3{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--teal);margin-bottom:10px}
+  .panel ul{list-style:none;display:flex;flex-direction:column;gap:9px}
+  .panel li{font-size:14.5px;line-height:1.45;color:#cbd5e1;display:flex;gap:9px}
+  .panel li:before{content:"›";color:var(--teal);font-weight:800}
+  .panel p{font-size:14.5px;line-height:1.55;color:var(--muted)}
+  .ask{border:1px solid rgba(20,184,166,.45);border-radius:18px;padding:24px 28px;background:linear-gradient(120deg,rgba(20,184,166,.16),rgba(139,92,246,.12));display:flex;align-items:center;gap:24px}
+  .ask .amount{font-size:80px;font-weight:850;letter-spacing:-.05em;line-height:1}
+  .ask .unit{font-size:19px;color:#cbd5e1;max-width:300px;line-height:1.35}
+  .download{position:fixed;right:16px;top:16px;z-index:99;font-family:var(--mono);font-size:10.5px;color:var(--text);background:rgba(255,255,255,.08);border:1px solid var(--line);padding:8px 12px;border-radius:999px;text-decoration:none}
+  @media print{
+    html,body{background:#070d18;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    body{zoom:1}
+    .download{display:none}
+    .slide{page-break-after:always;break-after:page;border:0}
+    .slide:last-child{page-break-after:auto;break-after:auto}
+  }
+  @page{size:1280px 720px;margin:0}
+</style>
+</head>
+<body>
+<a class="download" href="geowallah-daytona-deck.pdf">PDF</a>
+<div class="deck">
+
+  <!-- 1 -->
+  <section class="slide cover">
+    <div class="top"><span class="logo"><span class="mark">G</span>GEOwallah</span><span>Daytona Startup Grid — 2026</span></div>
+    <div class="cover-row">
+    <div class="left">
+      <div style="margin-top:auto">
+        <div class="kicker">AI search · AEO · GEO · local</div>
+        <h1>Be the <span class="grad">answer</span> they get.</h1>
+        <p class="lede">GEOwallah makes local businesses the result people see on Google — and the brand ChatGPT and Gemini recommend by name.</p>
+      </div>
+      <div class="foot" style="margin-top:34px"><span>Sayan Roy Chowdhury · Founder</span><span>geowallah.com</span></div>
+    </div>
+    <div class="right">
+      <div class="mock" style="width:390px">
+        <div class="bar"><i></i><i></i><i></i></div>
+        <div class="q">BEST PET BOARDING IN BARRACKPORE</div>
+        <div class="bubble" style="margin-bottom:10px">"For pet boarding in Barrackpore, I'd recommend <span class="hl">Emily's Pet Heaven</span> — a highly rated 24/7 facility with grooming and an in-house vet."</div>
+        <div class="bubble" style="opacity:.55">Sources: Google Maps · business site · 212 reviews</div>
+      </div>
+    </div>
+    </div>
+  </section>
+
+  <!-- 2 -->
+  <section class="slide">
+    <div class="top"><span class="logo"><span class="mark">G</span>GEOwallah</span><span>The problem</span></div>
+    <div class="kicker">What changed</div>
+    <h2>Buyers stopped scrolling. They started asking.</h2>
+    <p class="lede" style="margin-bottom:24px">Search now happens on three surfaces at once. Most agencies optimise one, and disappear from the other two.</p>
+    <div class="cols">
+      <div class="surface">
+        <div class="name"><span class="dot" style="background:#4285f4"></span>Google Search</div>
+        <div class="bubble" style="font-size:12px">Map Pack, snippets, AI Overviews. If you are not in the top three, you are not in the decision.</div>
+        <ul><li>Rankings without citations</li><li>AI Overviews skipping your page</li></ul>
+      </div>
+      <div class="surface">
+        <div class="name"><span class="dot" style="background:var(--teal)"></span>ChatGPT · Gemini</div>
+        <div class="bubble" style="font-size:12px">"Who's the best near me?" gets one answer, by name. No blue links, no second page.</div>
+        <ul><li>Competitor named, you are not</li><li>No way to see why</li></ul>
+      </div>
+      <div class="surface">
+        <div class="name"><span class="dot" style="background:var(--amber)"></span>Google Maps</div>
+        <div class="bubble" style="font-size:12px">Local intent converts fastest — and the Map Pack is won by reviews, categories and proximity signals.</div>
+        <ul><li>Incomplete GBP</li><li>No review or citation engine</li></ul>
+      </div>
+    </div>
+    <div class="foot"><span>One business. Three search surfaces. Zero shared playbook.</span><span>geowallah.com</span></div>
+  </section>
+
+  <!-- 3 -->
+  <section class="slide">
+    <div class="top"><span class="logo"><span class="mark">G</span>GEOwallah</span><span>The product</span></div>
+    <div class="kicker">What we do</div>
+    <h2>One engine. Three frontiers.</h2>
+    <div class="cols">
+      <div class="card"><div class="tag">01 · AI engines</div><h3>GEO &amp; AEO</h3><p>Entity and schema work, citable content clusters and answer-shaped pages so ChatGPT, Gemini and Perplexity name the client.</p></div>
+      <div class="card"><div class="tag">02 · Google</div><h3>SEO &amp; AI SEO</h3><p>Technical fixes, on-page work and AI-accelerated content that climbs rankings and earns the click.</p></div>
+      <div class="card"><div class="tag">03 · Local</div><h3>GBP &amp; Map Pack</h3><p>Profile optimisation, reviews, citations and location pages that win the map for nearby buyers.</p></div>
+    </div>
+    <div class="stats">
+      <div class="stat"><div class="v">90+</div><div class="l">Pages shipped</div></div>
+      <div class="stat"><div class="v">9</div><div class="l">Free audit tools</div></div>
+      <div class="stat"><div class="v">₹1,999+</div><div class="l">Monthly plans</div></div>
+      <div class="stat"><div class="v">4</div><div class="l">Service lines</div></div>
+    </div>
+    <div class="foot"><span>Audit → strategy → execute → report, fixed price</span><span>geowallah.com</span></div>
+  </section>
+
+  <!-- 4 -->
+  <section class="slide">
+    <div class="top"><span class="logo"><span class="mark">G</span>GEOwallah</span><span>Proof</span></div>
+    <div class="kicker">A real client</div>
+    <h2>From invisible to <span class="grad">#1</span> — on Google, ChatGPT and Gemini.</h2>
+    <p class="lede" style="margin-bottom:20px">Emily's Pet Heaven, Barrackpore. The query: <b style="color:#eef2f8">"best pet boarding in Barrackpore."</b></p>
+    <div class="proof">
+      <div class="pcard"><div class="n">Google · Map Pack</div><div class="v">#1</div><div class="d">Top of the local pack, above competitors with 100+ more reviews.</div></div>
+      <div class="pcard"><div class="n">ChatGPT · answer</div><div class="v">Top pick</div><div class="d">Named first when asked for the best pet boarding in the area.</div></div>
+      <div class="pcard"><div class="n">Gemini · answer</div><div class="v">Top result</div><div class="d">Opens with the business — rating, location and services included.</div></div>
+    </div>
+    <div class="foot"><span>Verified screenshots on geowallah.com</span><span>geowallah.com</span></div>
+  </section>
+
+  <!-- 5 -->
+  <section class="slide">
+    <div class="top"><span class="logo"><span class="mark">G</span>GEOwallah</span><span>Why Daytona</span></div>
+    <div class="kicker">The operational gap</div>
+    <h2>Every client, every day, needs a <span class="grad">fresh audit</span>.</h2>
+    <div class="split">
+      <div class="panel">
+        <h3>Today</h3>
+        <p>Audits and AI-visibility checks run as scripts on one machine: crawl the site, probe ChatGPT / Gemini / Perplexity, snapshot SERPs, validate schema and NAP, then build the report. It is sequential, brittle, and blocks the moment two clients run at once.</p>
+      </div>
+      <div class="panel">
+        <h3>What we need</h3>
+        <ul>
+          <li>One isolated sandbox per client audit — no shared cookies, no cross-client leakage.</li>
+          <li>Burst to 10–30 concurrent audits on reporting day.</li>
+          <li>Scheduled re-checks, per-second billing, nothing idle overnight.</li>
+          <li>Snapshots with the crawler and browser toolchain pre-warmed.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="stats" style="margin-top:18px">
+      <div class="stat"><div class="v">50–200</div><div class="l">Audits per day</div></div>
+      <div class="stat"><div class="v">60–300s</div><div class="l">Per audit</div></div>
+      <div class="stat"><div class="v">10–30</div><div class="l">Concurrent</div></div>
+      <div class="stat"><div class="v">0</div><div class="l">Idle servers</div></div>
+    </div>
+  </section>
+
+  <!-- 6 -->
+  <section class="slide">
+    <div class="top"><span class="logo"><span class="mark">G</span>GEOwallah</span><span>The pipeline</span></div>
+    <div class="kicker">One sandbox per client, per run</div>
+    <h2>Crawl, probe, validate, report.</h2>
+    <div class="flow">
+      <div class="node"><div class="n">01</div><div class="t">Crawl</div><div class="d">Client site, sitemap, schema and internal links.</div></div>
+      <div class="arrow">→</div>
+      <div class="node"><div class="n">02</div><div class="t">Probe AI</div><div class="d">Ask ChatGPT, Gemini and Perplexity the money queries.</div></div>
+      <div class="arrow">→</div>
+      <div class="node"><div class="n">03</div><div class="t">Validate</div><div class="d">NAP, GBP fields, citations, Core Web Vitals.</div></div>
+      <div class="arrow">→</div>
+      <div class="node"><div class="n">04</div><div class="t">Score</div><div class="d">Visibility across Google, AI and Maps.</div></div>
+      <div class="arrow">→</div>
+      <div class="node"><div class="n">05</div><div class="t">Report</div><div class="d">PDF + 3 quick wins, sent to the client.</div></div>
+    </div>
+    <div class="split" style="margin-top:20px">
+      <div class="panel"><h3>Why CPU is enough</h3><p>Headless browsing, crawling and report rendering are CPU-bound. The LLM calls go to hosted APIs, so no GPU fleet is needed.</p></div>
+      <div class="panel"><h3>Why Daytona fits</h3><p>Disposable sandboxes per client, snapshot-restored crawler images, and per-second billing that matches a bursty reporting calendar.</p></div>
+    </div>
+  </section>
+
+  <!-- 7 -->
+  <section class="slide">
+    <div class="top"><span class="logo"><span class="mark">G</span>GEOwallah</span><span>The ask</span></div>
+    <div class="kicker">What we need</div>
+    <div class="ask">
+      <div class="amount grad">$10,000</div>
+      <div class="unit">in Daytona credits to run every client audit in its own sandbox.</div>
+    </div>
+    <div class="split" style="margin-top:22px">
+      <div class="panel">
+        <h3>What we will run</h3>
+        <ul>
+          <li>50–200 client audits per day, each in a clean sandbox.</li>
+          <li>AI-visibility probes across ChatGPT, Gemini and Perplexity.</li>
+          <li>Load tests at 10–30 concurrent audits on reporting days.</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h3>What you get back</h3>
+        <p>Real concurrency benchmarks for browser-heavy audit workloads, usage data from a production agency pipeline, a written case study and developer content about sandboxed SEO auditing on Daytona.</p>
+      </div>
+    </div>
+    <div class="foot"><span>sayan.roychowdhury@geowallah.com</span><span>Sayan Roy Chowdhury · geowallah.com</span></div>
+  </section>
+
+</div>
+</body>
+</html>

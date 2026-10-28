@@ -207,7 +207,8 @@
           <li>One isolated sandbox per client audit — no shared cookies, no cross-client leakage.</li>
           <li>Burst to 10–30 concurrent audits on reporting day.</li>
           <li>Scheduled re-checks, per-second billing, nothing idle overnight.</li>
-          <li>Snapshots with the crawler and browser toolchain pre-warmed.</li>
+          <li>GPU sandboxes for embeddings and self-hosted content drafting.</li>
+          <li>Snapshots with the crawler and model toolchain pre-warmed.</li>
         </ul>
       </div>
     </div>
@@ -236,7 +237,7 @@
       <div class="node"><div class="n">05</div><div class="t">Report</div><div class="d">PDF + 3 quick wins, sent to the client.</div></div>
     </div>
     <div class="split" style="margin-top:20px">
-      <div class="panel"><h3>Why CPU is enough</h3><p>Headless browsing, crawling and report rendering are CPU-bound. The LLM calls go to hosted APIs, so no GPU fleet is needed.</p></div>
+      <div class="panel"><h3>CPU + GPU split</h3><p>Crawling, screenshots and validation are CPU-bound. Embeddings, topical maps and self-hosted drafting run on GPU sandboxes, so client content never leaves our infrastructure.</p></div>
       <div class="panel"><h3>Why Daytona fits</h3><p>Disposable sandboxes per client, snapshot-restored crawler images, and per-second billing that matches a bursty reporting calendar.</p></div>
     </div>
   </section>
@@ -255,6 +256,7 @@
         <ul>
           <li>50–200 client audits per day, each in a clean sandbox.</li>
           <li>AI-visibility probes across ChatGPT, Gemini and Perplexity.</li>
+          <li>GPU sandboxes for embeddings and self-hosted content drafting.</li>
           <li>Load tests at 10–30 concurrent audits on reporting days.</li>
         </ul>
       </div>
